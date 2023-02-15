@@ -1,0 +1,14 @@
+### ui
+
+## design
+- navbar
+- table
+- modal
+
+
+### db connection
+
+## activate virtual environment
+- virtualenv -p python3 env
+- .\env\Scripts\activate
+- create connection_sqlite3.py
