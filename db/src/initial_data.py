@@ -9,15 +9,37 @@ try:
     # below set of queries will create and insert
     # data into table
     cursor.executescript("""
-        CREATE TABLE tbDays (id INT PRIMARY KEY, description VARCHAR(50));
-        INSERT INTO tbDays VALUES ( 1,'Monday');
-        INSERT INTO tbDays VALUES ( 2,'Tuesday');
-        INSERT INTO tbDays VALUES ( 3,'Wednesday');
-        INSERT INTO tbDays VALUES ( 4,'Thursday');
-        INSERT INTO tbDays VALUES ( 5,'Friday');
-        INSERT INTO tbDays VALUES ( 6,'Saturday');
-        INSERT INTO tbDays VALUES ( 7,'Sunday');
+        PRAGMA foreign_keys = ON;
         
+        CREATE TABLE tbDays (
+            day_id INTEGER PRIMARY KEY,
+            day_description VARCHAR(50)
+        );
+        
+        CREATE TABLE tbTasks (
+            task_id INTEGER PRIMARY KEY, 
+            task_description VARCHAR(250),
+            day_id INTEGER REFERENCES tbDays(day_id)
+        );
+        
+        INSERT INTO tbDays VALUES (1,'Monday');
+        INSERT INTO tbDays VALUES (2,'Tuesday');
+        INSERT INTO tbDays VALUES (3,'Wednesday');
+        INSERT INTO tbDays VALUES (4,'Thursday');
+        INSERT INTO tbDays VALUES (5,'Friday');
+        INSERT INTO tbDays VALUES (6,'Saturday');
+        INSERT INTO tbDays VALUES (7,'Sunday');
+        
+        INSERT INTO tbTasks VALUES (1, 'Complete project report', 1);
+        INSERT INTO tbTasks VALUES (2, 'Attend team meeting', 2);
+        INSERT INTO tbTasks VALUES (3, 'Submit expense report', 3);
+        INSERT INTO tbTasks VALUES (4, 'Review code changes', 4);
+        INSERT INTO tbTasks VALUES (5, 'Prepare for client presentation', 5);
+        INSERT INTO tbTasks VALUES (6, 'Update website content', 6);
+        INSERT INTO tbTasks VALUES (7, 'Call vendor for new equipment', 7);
+        INSERT INTO tbTasks VALUES (8, 'Draft marketing email', 1);
+        INSERT INTO tbTasks VALUES (9, 'Attend project kickoff meeting', 2);
+        INSERT INTO tbTasks VALUES (10, 'Review performance metrics', 3);
     """)
     
     # commit the changes and close the database connection 
