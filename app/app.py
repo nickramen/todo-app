@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlite3
-#import requests
 
 app = Flask(__name__,template_folder='template')
 
 @app.route('/index', methods=['GET'])
-def get_initial_data():
+def index():
     # make the database connection and cursor object
     myConnection = sqlite3.connect("../db/src/database/mydb.sqlite3")
     cursor = myConnection.cursor()
@@ -32,7 +31,7 @@ def add_task():
     # make the database connection and cursor object
     myConnection = sqlite3.connect("../db/src/database/mydb.sqlite3")
     cursor = myConnection.cursor()
-    
+
     # Get the task description and day ID from the form
     task_description = request.form['task_description']
     day_id = request.form['day_id']
@@ -45,7 +44,7 @@ def add_task():
     # Insert the new task into the database
     cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?)', (last_id + 1, task_description, day_id))
     myConnection.commit()
-
+    
     # Redirect to the home page
     return redirect(url_for('index'))
 
