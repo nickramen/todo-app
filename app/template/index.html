@@ -32,48 +32,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
                     <tr>
                         {% for day in days %}
                         <td>
                             {% for task in tasks_by_day[day[0]] %}
-                            {{ task[1] }}<br>
+                            <input type="checkbox" id="{{ task[0] }}">
+                            <label for="{{ task[0] }}">{{ task[1] }}</label><br>
                             {% endfor %}
                         </td>
                         {% endfor %}
                     </tr>
-                    
                 </tbody>
-
-                <!-- <tbody>
-                    <tr>
-                        <td>Walk the dog</td>
-                        <td>Study French</td>
-                        <td>Do math homework</td>
-                        <td>Call Jones</td>
-                        <td>Do research</td>
-                        <td>3d modeling</td>
-                        <td>Go to the park</td>
-                    </tr>
-                    <tr>
-                        <td>Pick Jacob's cake</td>
-                        <td></td>
-                        <td>Dentist appointment</td>
-                        <td>Golfing with Lisa</td>
-                        <td></td>
-                        <td>Bake cookies</td>
-                        <td>Write blog</td>
-                    </tr>
-                    <tr>
-                        <td>Spanish clas</td>
-                        <td></td>
-                        <td></td>
-                        <td>Call Sungyun</td>
-                        <td></td>
-                        <td>Prepare presentation</td>
-                        <td></td>
-                    </tr>
-                </tbody> -->
             </table>
         </div>
 
@@ -88,10 +57,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" action="{{ url_for('add_task') }}">
                 <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Day of the week:</label>
-                    <select class="form-control" aria-label="day of the week" id="day-week">
+                    <label for="day_id" class="form-label">Day of the week:</label>
+                    <select class="form-control" id="day_id" name="day_id">
                         <option selected>Select a day</option>
                         {% for row in days %}
                         <option value="{{ row[0] }}">{{ row[1] }}</option>
@@ -99,14 +68,14 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="message-text" class="col-form-label">Task description:</label>
-                    <input type="text" class="form-control" id="task-description">
+                    <label for="task_description" class="form-label">Task description</label>
+                    <input type="text" class="form-control" id="task_description" name="task_description">
                 </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Add new task</button>
+                <button type="submit" class="btn btn-primary">Add new task</button>
             </div>
             </div>
         </div>
