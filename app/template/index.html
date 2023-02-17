@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+        <style>
+        </style>
+
+
         <title>todo</title>
     </head>
     <body>
@@ -18,7 +22,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal">Add task</button>
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addTaskModal">Add task</button>
             </div>
         </nav>
 
@@ -42,9 +46,11 @@
                                 <!--checks whether the task is done or not-->
                                     {% if task[2] == 1 %}
                                         <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks" checked >
+                                        <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
                                         <label for="{{ task[0] }}" >{{ task[1] }}</label><br>
                                     {% else %}
                                         <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks">
+                                        <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
                                         <label for="{{ task[0] }}">{{ task[1] }}</label><br>
                                     {% endif %}
                                 {% endfor %}
@@ -59,7 +65,7 @@
         </div>
 
         <!--Modal-->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -92,12 +98,36 @@
             </div>
         </div>
         </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to permanently delete this task?</p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" id="task-delete-button" task-id="" onclick="taskDelete()">Delete task</button>
+            </div>
+        </div>
+        </div>
+    </div>
         
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
         <script>
             function addNewTask() {
@@ -111,7 +141,7 @@
                 .catch(error => console.error(error));
                 //$('#exampleModal').modal('hide');
                 // Get all the input fields in the modal
-                var inputs = document.querySelectorAll('#exampleModal input');
+                var inputs = document.querySelectorAll('#addTaskModal input');
                 // Reset the value of each input field
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].value = '';
@@ -139,6 +169,35 @@
                 })
                 .then(response => response.text())
                 .catch(error => console.error(error));
+            }
+            
+        </script>
+
+        <script>
+            // Get all elements with class "icon-delete"
+            var inputs = document.querySelectorAll('.icon-delete');
+            // Attach a click event to each element
+            inputs.forEach(function(input) {
+            input.addEventListener('click', function() {
+                    // Get the id of the clicked input
+                    var id = this.id;
+                    // Set the delete button from the modal
+                    var deleteButton = document.querySelector('#task-delete-button');
+                    deleteButton.setAttribute('task-id', id);
+                    console.log(id);
+                });
+            });
+
+            function taskDelete() {
+                var id = document.getElementById("task-delete-button").getAttribute("task-id");  
+                console.log(id)
+                fetch('/delete_task', {
+                    method: 'POST',
+                    body: id
+                })
+                .then(response => response.text())
+                .catch(error => console.error(error));
+                location.reload();
             }
             
         </script>
