@@ -13,13 +13,13 @@ def index():
     cursor.execute('SELECT day_id, day_description FROM tbDays')
     days = cursor.fetchall()
     
-    cursor.execute('SELECT task_id, task_description, day_id FROM tbTasks')
+    cursor.execute('SELECT task_id, task_description, isDone, day_id FROM tbTasks')
     tasks = cursor.fetchall()
     
     # Create a dictionary that maps each day ID to a list of tasks
     tasks_by_day = {day[0]: [] for day in days}
     for task in tasks:
-        tasks_by_day[task[2]].append((task[0], task[1]))
+        tasks_by_day[task[3]].append((task[0], task[1], task[2]))
     
     # Pass the days and tasks, along with the dictionary to the HTML template
     return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day)

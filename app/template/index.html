@@ -26,6 +26,7 @@
             <table class="table" id="weekly-tasks-table">
                 <thead>
                     <tr>
+                    <!--lists days of the week-->
                     {% for day in days %}
                         <td><b>{{ day[1] }}</b></td>
                     {% endfor %}
@@ -35,10 +36,21 @@
                     <tr>
                         {% for day in days %}
                         <td>
-                            {% for task in tasks_by_day[day[0]] %}
-                            <input type="checkbox" id="{{ task[0] }}">
-                            <label for="{{ task[0] }}">{{ task[1] }}</label><br>
-                            {% endfor %}
+                            <!--checks whether the list of tasks for a given day is not empty-->
+                            {% if tasks_by_day[day[0]] %}
+                                {% for task in tasks_by_day[day[0]] %}
+                                <!--checks whether the task is done or not-->
+                                    {% if task[2] == 1 %}
+                                        <input type="checkbox" id="{{ task[0] }}" checked>
+                                        <label for="{{ task[0] }}">{{ task[1] }}</label><br>
+                                    {% else %}
+                                        <input type="checkbox" id="{{ task[0] }}">
+                                        <label for="{{ task[0] }}">{{ task[1] }}</label><br>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                No tasks for this day.
+                            {% endif %}
                         </td>
                         {% endfor %}
                     </tr>
