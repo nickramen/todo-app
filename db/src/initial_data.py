@@ -19,7 +19,7 @@ try:
         CREATE TABLE tbTasks (
             task_id INTEGER PRIMARY KEY, 
             task_description VARCHAR(250),
-            isDone INT(1),
+            task_status INT(1),
             day_id INTEGER REFERENCES tbDays(day_id)
         );
         

@@ -41,10 +41,10 @@
                                 {% for task in tasks_by_day[day[0]] %}
                                 <!--checks whether the task is done or not-->
                                     {% if task[2] == 1 %}
-                                        <input type="checkbox" id="{{ task[0] }}" checked>
-                                        <label for="{{ task[0] }}">{{ task[1] }}</label><br>
+                                        <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks" checked >
+                                        <label for="{{ task[0] }}" >{{ task[1] }}</label><br>
                                     {% else %}
-                                        <input type="checkbox" id="{{ task[0] }}">
+                                        <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks">
                                         <label for="{{ task[0] }}">{{ task[1] }}</label><br>
                                     {% endif %}
                                 {% endfor %}
@@ -87,7 +87,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="callMethod()" class="btn btn-primary">Add new task</button>
+                <button type="button" onclick="addNewTask()" class="btn btn-primary">Add new task</button>
             </div>
             </div>
         </div>
@@ -100,7 +100,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
         <script>
-            function callMethod() {
+            function addNewTask() {
                 const form = document.querySelector('form');
                 const formData = new FormData(form);
                 fetch('/add_task', {
@@ -119,5 +119,29 @@
                 location.reload();
             }
         </script>
+
+        <script>
+            // Get all elements with class "list-of-tasks"
+            var inputs = document.querySelectorAll('.list-of-tasks');
+            // Attach a click event to each element
+            inputs.forEach(function(input) {
+            input.addEventListener('click', function() {
+                    // Get the id of the clicked input
+                    var id = this.id;
+                    // Call a function and pass the id as an argument
+                    taskStatus(id);
+                });
+            });
+            function taskStatus(id) {
+                fetch('/task_status', {
+                    method: 'POST',
+                    body: id
+                })
+                .then(response => response.text())
+                .catch(error => console.error(error));
+            }
+            
+        </script>
+
     </body>
 </html>
