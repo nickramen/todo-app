@@ -9,9 +9,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <style>
-        </style>
-
+        <!-- <link rel="stylesheet" href="{{ url_for('serve_static', path='/app/assets/css/styles.css') }}"> -->
 
         <title>todo</title>
     </head>
@@ -27,41 +25,62 @@
         </nav>
 
         <div class="container-fluid">
-            <table class="table" id="weekly-tasks-table">
-                <thead>
-                    <tr>
-                    <!--lists days of the week-->
-                    {% for day in days %}
-                        <td><b>{{ day[1] }}</b></td>
-                    {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
+            <div>
+                <br>
+                <h4>Summary</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div>
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div>
+                            <canvas id="myChart2"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <br>
+                <h4>Weekly tasks</h4>
+                <table class="table" id="weekly-tasks-table">
+                    <thead>
+                        <tr>
+                        <!--lists days of the week-->
                         {% for day in days %}
-                        <td>
-                            <!--checks whether the list of tasks for a given day is not empty-->
-                            {% if tasks_by_day[day[0]] %}
-                                {% for task in tasks_by_day[day[0]] %}
-                                <!--checks whether the task is done or not-->
-                                    {% if task[2] == 1 %}
-                                        <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks" checked >
-                                        <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
-                                        <label for="{{ task[0] }}" >{{ task[1] }}</label><br>
-                                    {% else %}
-                                        <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks">
-                                        <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
-                                        <label for="{{ task[0] }}">{{ task[1] }}</label><br>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                No tasks for this day.
-                            {% endif %}
-                        </td>
+                            <td><b>{{ day[1] }}</b></td>
                         {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for day in days %}
+                            <td>
+                                <!--checks whether the list of tasks for a given day is not empty-->
+                                {% if tasks_by_day[day[0]] %}
+                                    {% for task in tasks_by_day[day[0]] %}
+                                    <!--checks whether the task is done or not-->
+                                        {% if task[2] == 1 %}
+                                            <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks" checked >
+                                            <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
+                                            <label for="{{ task[0] }}" >{{ task[1] }}</label><br>
+                                        {% else %}
+                                            <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks">
+                                            <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
+                                            <label for="{{ task[0] }}">{{ task[1] }}</label><br>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    No tasks for this day.
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!--Modal-->
@@ -129,78 +148,76 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+        <script src="{{ url_for('serve_static', path='js/task-actions.js') }}"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         <script>
-            function addNewTask() {
-                const form = document.querySelector('form');
-                const formData = new FormData(form);
-                fetch('/add_task', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .catch(error => console.error(error));
-                //$('#exampleModal').modal('hide');
-                // Get all the input fields in the modal
-                var inputs = document.querySelectorAll('#addTaskModal input');
-                // Reset the value of each input field
-                for (var i = 0; i < inputs.length; i++) {
-                    inputs[i].value = '';
+            const ctx = document.getElementById('myChart1');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    datasets: [{
+                        axis: 'y',
+                        label: 'Total tasks per day',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        fill: false,
+                        backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        y: {
+                        beginAtZero: true
+                        }
+                    }
                 }
-                location.reload();
-            }
-        </script>
-
-        <script>
-            // Get all elements with class "list-of-tasks"
-            var inputs = document.querySelectorAll('.list-of-tasks');
-            // Attach a click event to each element
-            inputs.forEach(function(input) {
-            input.addEventListener('click', function() {
-                    // Get the id of the clicked input
-                    var id = this.id;
-                    // Call a function and pass the id as an argument
-                    taskStatus(id);
-                });
             });
-            function taskStatus(id) {
-                fetch('/task_status', {
-                    method: 'POST',
-                    body: id
-                })
-                .then(response => response.text())
-                .catch(error => console.error(error));
-            }
-            
         </script>
-
         <script>
-            // Get all elements with class "icon-delete"
-            var inputs = document.querySelectorAll('.icon-delete');
-            // Attach a click event to each element
-            inputs.forEach(function(input) {
-            input.addEventListener('click', function() {
-                    // Get the id of the clicked input
-                    var id = this.id;
-                    // Set the delete button from the modal
-                    var deleteButton = document.querySelector('#task-delete-button');
-                    deleteButton.setAttribute('task-id', id);
-                    console.log(id);
-                });
-            });
-
-            function taskDelete() {
-                var id = document.getElementById("task-delete-button").getAttribute("task-id");  
-                console.log(id)
-                fetch('/delete_task', {
-                    method: 'POST',
-                    body: id
-                })
-                .then(response => response.text())
-                .catch(error => console.error(error));
-                location.reload();
-            }
+            const ctx2 = document.getElementById('myChart2');
             
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Undone', 'Done'],
+                    datasets: [{
+                        label: 'Total tasks per week',
+                        data: [300, 59],
+                        fill: false,
+                        backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(75, 192, 192)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+            });
         </script>
-
     </body>
 </html>

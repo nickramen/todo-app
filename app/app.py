@@ -1,7 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import sqlite3
 
 app = Flask(__name__,template_folder='template')
+
+# Route for serving static files
+@app.route('/assets/<path:path>')
+def serve_static(path):
+    return send_from_directory('assets', path)
 
 @app.route('/index', methods=['GET'])
 def index():
@@ -78,6 +83,23 @@ def task_status():
 
 @app.route('/delete_task', methods=['POST'])
 def delete_task():
+    
+    # Make the database connection and cursor object
+    # Get the id from the request body
+    # Delete task status using the id
+    # Redirect to the home page
+    
+    with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
+        cursor = myConnection.cursor()
+        
+        taskId = request.get_data(as_text=True)
+        cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+        
+        return redirect(url_for('index'))
+    
+    
+@app.route('/task_done_undone', methods=['POST'])
+def task_done_undone():
     
     # Make the database connection and cursor object
     # Get the id from the request body
