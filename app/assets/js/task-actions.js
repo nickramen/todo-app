@@ -42,6 +42,7 @@ function taskStatus(id) {
     })
     .then(response => response.text())
     .catch(error => console.error(error));
+    window.location.reload('http://127.0.0.1:5000/index');
 }
 
 //---------------------------

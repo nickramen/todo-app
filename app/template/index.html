@@ -32,11 +32,13 @@
                     <div class="col-md-4">
                         <div>
                             <canvas id="myChart1"></canvas>
+                            <input type="text" id="myChart1Data" value="{{ task_per_day_count | tojson }}" hidden></input>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div>
                             <canvas id="myChart2"></canvas>
+                            <input type="text" id="myChart2Data" value="{{ task_count | tojson }}" hidden></input>
                         </div>
                     </div>
                 </div>
@@ -154,7 +156,9 @@
 
         <script>
             const ctx = document.getElementById('myChart1');
-            
+            var ctxData = document.getElementById("myChart1Data");  
+            var ctxDataValue = JSON.parse(ctxData.value);
+
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -162,7 +166,7 @@
                     datasets: [{
                         axis: 'y',
                         label: 'Total tasks per day',
-                        data: [65, 59, 80, 81, 56, 55, 40],
+                        data: ctxDataValue,
                         fill: false,
                         backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -194,17 +198,20 @@
                     }
                 }
             });
+            console.log(ctxDataValue)
         </script>
         <script>
             const ctx2 = document.getElementById('myChart2');
-            
+            var ctx2Data = document.getElementById("myChart2Data");  
+            var ctx2DataValue = JSON.parse(ctx2Data.value);
+
             new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
                     labels: ['Undone', 'Done'],
                     datasets: [{
                         label: 'Total tasks per week',
-                        data: [300, 59],
+                        data: ctx2DataValue,
                         fill: false,
                         backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',

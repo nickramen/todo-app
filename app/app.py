@@ -14,6 +14,7 @@ def index():
     # Fetch all the days and tasks from the database
     # Create a dictionary that maps each day ID to a list of tasks
     # Pass the days and tasks, along with the dictionary to the HTML template
+    # Load data for the graphs by calling the method: task_done_undone()
     
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
@@ -27,8 +28,12 @@ def index():
         tasks_by_day = {day[0]: [] for day in days}
         for task in tasks:
             tasks_by_day[task[3]].append((task[0], task[1], task[2]))
+            
+            
+    task_count = task_done_undone()
+    task_per_day_count = task_per_day()
         
-        return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day)
+    return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day, task_count=task_count,task_per_day_count=task_per_day_count)
 
 
 @app.route('/add_task', methods=['POST'])
@@ -97,22 +102,79 @@ def delete_task():
         
         return redirect(url_for('index'))
     
-    
-@app.route('/task_done_undone', methods=['POST'])
-def task_done_undone():
+@app.route('/task_per_day', methods=['POST'])
+def task_per_day():
     
     # Make the database connection and cursor object
-    # Get the id from the request body
-    # Delete task status using the id
+    # Select all the tasks from tbTasks
+    # Determine how many tasks are done and how many are undone
     # Redirect to the home page
     
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
         
-        taskId = request.get_data(as_text=True)
-        cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+        cursor.execute('SELECT day_id FROM tbTasks')
+        tasks = cursor.fetchall()
         
-        return redirect(url_for('index'))
+        def count_tasks(tasks):
+            monday = 0
+            tuesday = 0
+            wednesday = 0
+            thursday = 0
+            friday = 0
+            saturday = 0
+            sunday = 0
+            
+            for task in tasks:
+                if task[0] == 1:
+                    monday += 1
+                elif task[0] == 2:
+                    tuesday += 1
+                elif task[0] == 3:
+                    wednesday += 1
+                elif task[0] == 4:
+                    thursday += 1
+                elif task[0] == 5:
+                    friday += 1
+                elif task[0] == 6:
+                    saturday += 1
+                elif task[0] == 7:
+                    sunday += 1
+                    
+                    
+            return [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+
+        task_per_day_count = count_tasks(tasks)
+        
+    return task_per_day_count
+    
+@app.route('/task_done_undone', methods=['POST'])
+def task_done_undone():
+    
+    # Make the database connection and cursor object
+    # Select all the tasks from tbTasks
+    # Determine how many tasks are done and how many are undone
+    # Redirect to the home page
+    
+    with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
+        cursor = myConnection.cursor()
+        
+        cursor.execute('SELECT task_status FROM tbTasks')
+        tasks = cursor.fetchall()
+        
+        def count_tasks(tasks):
+            done_count = 0
+            undone_count = 0
+            for task in tasks:
+                if task[0] == 1:
+                    done_count += 1
+                elif task[0] == 0:
+                    undone_count += 1
+            return [done_count, undone_count]
+
+        task_count = count_tasks(tasks)
+        
+    return task_count
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
