@@ -118,7 +118,7 @@ def delete_task():
         taskId = request.get_data(as_text=True)
         cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
         
-        return redirect(url_for('index'))
+        return jsonify({'success': True})
     
 @app.route('/task_per_day', methods=['POST'])
 def task_per_day():

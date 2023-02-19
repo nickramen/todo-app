@@ -15,6 +15,7 @@ function addNewTask() {
         if (data.success) {
             // Redirect to index page if login is successful
             alertDiv.style.display = 'block';
+            alertDiv.innerText = '';
             alertDiv.classList.remove('alert-danger');
             alertDiv.classList.add('alert-success');
             alertDiv.innerText = 'Task added successfully';
@@ -31,6 +32,7 @@ function addNewTask() {
             }
             // Display error message if login is unsuccessful
             alertDiv.style.display = 'block';
+            alertDiv.innerText = '';
             alertDiv.classList.remove('alert-success');
             alertDiv.classList.add('alert-danger');
             alertDiv.innerText = 'Task was not added';
@@ -89,8 +91,32 @@ function taskDelete() {
         method: 'POST',
         body: id
     })
-    .then(response => response.text())
+    .then(response => response.json())
+    .then(data => {
+        const alertDiv = document.getElementById('login-alert');
+        if (data.success) {
+            // Redirect to index page if login is successful
+            alertDiv.style.display = 'block';
+            alertDiv.innerText = '';
+            alertDiv.classList.remove('alert-danger');
+            alertDiv.classList.add('alert-success');
+            alertDiv.innerText = 'Task deleted successfully';
+            
+            window.location.href = 'http://127.0.0.1:5000/index';
+
+        } else {
+
+            // Display error message if login is unsuccessful
+            alertDiv.style.display = 'block';
+            alertDiv.innerText = '';
+            alertDiv.classList.remove('alert-success');
+            alertDiv.classList.add('alert-danger');
+            alertDiv.innerText = 'Task was not deleted';
+            setTimeout(function() {
+                alertDiv.style.display = 'none';
+            }, 2000);
+        }
+    })
     .catch(error => console.error(error));
-    window.location.reload('http://127.0.0.1:5000/index');
 }
 
