@@ -1,47 +1,75 @@
-
+//---------------------------
+// Constant fields
+//---------------------------
+const task_description = document.getElementById('task_description');
+const day_id = document.getElementById('day_id');
+const alertDiv = document.getElementById('login-alert');
 //---------------------------
 // Add new task with button
 //---------------------------
 function addNewTask() {
-    const form = document.querySelector('form');
-    const formData = new FormData(form);
-    fetch('/add_task', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        const alertDiv = document.getElementById('login-alert');
-        if (data.success) {
-            // Redirect to index page if login is successful
-            alertDiv.style.display = 'block';
-            alertDiv.innerText = '';
-            alertDiv.classList.remove('alert-danger');
-            alertDiv.classList.add('alert-success');
-            alertDiv.innerText = 'Task added successfully';
-            
-            window.location.href = 'http://127.0.0.1:5000/index';
+    if(task_description.value == ""){
+        // Display error message if fields are empty
+        alertDiv.style.display = 'block';
+        alertDiv.innerText = '';
+        alertDiv.classList.remove('alert-success');
+        alertDiv.classList.add('alert-danger');
+        alertDiv.innerText = 'Task was not added. Do not leave empty fields.'+ day_id.value;
+        setTimeout(function() {
+            alertDiv.style.display = 'none';
+        }, 2000);
+    }
+    else if (day_id.value == "Select a day"){
+        // Display error message if day is not selected
+        alertDiv.style.display = 'block';
+        alertDiv.innerText = '';
+        alertDiv.classList.remove('alert-success');
+        alertDiv.classList.add('alert-danger');
+        alertDiv.innerText = 'Task was not added. Select a day.' + day_id.value;
+        setTimeout(function() {
+            alertDiv.style.display = 'none';
+        }, 2000);
+    }
+    else{
+        const form = document.querySelector('form');
+        const formData = new FormData(form);
+        fetch('/add_task', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect to index page if login is successful
+                alertDiv.style.display = 'block';
+                alertDiv.innerText = '';
+                alertDiv.classList.remove('alert-danger');
+                alertDiv.classList.add('alert-success');
+                alertDiv.innerText = 'Task added successfully';
+                
+                window.location.href = 'http://127.0.0.1:5000/index';
 
-        } else {
-            const myModal = $('#addTaskModal');
-            myModal.modal('hide');
-            var inputs = document.querySelectorAll('#addTaskModal input');
-            // Reset the value of each input field
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].value = '';
+            } else {
+                const myModal = $('#addTaskModal');
+                myModal.modal('hide');
+                var inputs = document.querySelectorAll('#addTaskModal input');
+                // Reset the value of each input field
+                for (var i = 0; i < inputs.length; i++) {
+                    inputs[i].value = '';
+                }
+                // Display error message if login is unsuccessful
+                alertDiv.style.display = 'block';
+                alertDiv.innerText = '';
+                alertDiv.classList.remove('alert-success');
+                alertDiv.classList.add('alert-danger');
+                alertDiv.innerText = 'Task was not added';
+                setTimeout(function() {
+                    alertDiv.style.display = 'none';
+                }, 2000);
             }
-            // Display error message if login is unsuccessful
-            alertDiv.style.display = 'block';
-            alertDiv.innerText = '';
-            alertDiv.classList.remove('alert-success');
-            alertDiv.classList.add('alert-danger');
-            alertDiv.innerText = 'Task was not added';
-            setTimeout(function() {
-                alertDiv.style.display = 'none';
-            }, 2000);
-        }
-    })
-    .catch(error => console.error(error));
+        })
+        .catch(error => console.error(error));
+    }
 }
 
 //---------------------------
@@ -93,7 +121,6 @@ function taskDelete() {
     })
     .then(response => response.json())
     .then(data => {
-        const alertDiv = document.getElementById('login-alert');
         if (data.success) {
             // Redirect to index page if login is successful
             alertDiv.style.display = 'block';
