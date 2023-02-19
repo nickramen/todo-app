@@ -10,6 +10,7 @@ const signup_password = document.getElementById('signup-password');
 const signup_confirm_password = document.getElementById('signup-confirm-password');
 
 const alertDiv = document.getElementById('login-alert');
+alertDiv.style.display = 'none';
 
 //---------------------------
 // Log In
@@ -145,29 +146,48 @@ function logoutButton(){
         body: {}
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Redirect to index page if login is successful
-            alertDiv.style.display = 'block';
-            alertDiv.innerText = '';
-            alertDiv.classList.remove('alert-danger');
-            alertDiv.classList.add('alert-success');
-            alertDiv.innerText = 'Logout successful.';
+    // .then(data => {
+    //     if (data.success) {
+    //         alertDiv.style.display = 'block';
+    //         alertDiv.innerText = '';
+    //         alertDiv.classList.remove('alert-danger');
+    //         alertDiv.classList.add('alert-success');
+    //         alertDiv.innerText = 'Logout successful.';// Redirect to index page if login is successful
             
-            setTimeout(() => {
-                window.location.href = 'http://127.0.0.1:5000/login';
-            }, 2000);
-        } else {
-            // Display error message if login is unsuccessful
-            alertDiv.style.display = 'block';
-            alertDiv.innerText = '';
-            alertDiv.classList.remove('alert-success');
-            alertDiv.classList.add('alert-danger');
-            alertDiv.innerText = 'Something went wrong when logging out.';
-            setTimeout(function() {
-                alertDiv.style.display = 'none';
-            }, 2000);
-        }
-    })
+            
+    //         setTimeout(() => {
+    //             window.location.href = 'http://127.0.0.1:5000/login';
+    //         }, 2000);
+    //     } else {
+    //         // Display error message if login is unsuccessful
+    //         alertDiv.style.display = 'block';
+    //         alertDiv.innerText = '';
+    //         alertDiv.classList.remove('alert-success');
+    //         alertDiv.classList.add('alert-danger');
+    //         alertDiv.innerText = 'Something went wrong when logging out.';
+    //         setTimeout(function() {
+    //             alertDiv.style.display = 'none';
+    //         }, 2000);
+    //     }
+    // })
     .catch(error => console.error(error));
+}
+
+//---------------------------
+// Redirect to Login when there is no active session
+//---------------------------
+const params = new URLSearchParams(window.location.search);
+const message = params.get('message');
+if (message && message !== "") {
+    alertDiv.style.display = 'block';
+    alertDiv.innerText = '';
+    alertDiv.classList.remove('alert-success');
+    alertDiv.classList.add('alert-danger');
+    alertDiv.innerText = message;
+    setTimeout(function() {
+        alertDiv.style.display = 'none';
+    }, 2000);
+}
+else if(message == ""){
+    alertDiv.style.display = 'none';
 }

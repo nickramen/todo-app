@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, session, jsonify, render_template_string
 import sqlite3
 
 app = Flask(__name__,template_folder='template')
@@ -21,24 +21,32 @@ def index():
     user_id = session.get('user_id')
     user_username = session.get('user_username')
     
-    with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
-        cursor = myConnection.cursor()
+    if 'username' not in session:
+        response_data = {'message': 'No active sessions. Please log in.'}
+        return redirect(url_for('login', message=response_data['message']))
     
-        cursor.execute('SELECT day_id, day_description FROM tbDays')
-        days = cursor.fetchall()
+    else:
+        with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
+            cursor = myConnection.cursor()
         
-        cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ?',(user_id,))
-        tasks = cursor.fetchall()
+            cursor.execute('SELECT day_id, day_description FROM tbDays')
+            days = cursor.fetchall()
+            
+            cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ?',(user_id,))
+            tasks = cursor.fetchall()
 
-        tasks_by_day = {day[0]: [] for day in days}
-        for task in tasks:
-            tasks_by_day[task[3]].append((task[0], task[1], task[2]))
+            tasks_by_day = {day[0]: [] for day in days}
+            for task in tasks:
+                tasks_by_day[task[3]].append((task[0], task[1], task[2]))
+                
+                
+        task_count = task_done_undone()
+        task_per_day_count = task_per_day()
             
-            
-    task_count = task_done_undone()
-    task_per_day_count = task_per_day()
+        return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username)
+    
         
-    return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username)
+        
 
 
 

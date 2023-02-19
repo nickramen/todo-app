@@ -21,9 +21,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 {% if session.user_id %}
-                    <p style="color:white;"><b>Welcome, {{ session.user_username }}, {{ session.user_id }}!</b></p>
+                    <p style="color:white;"><b>Welcome, {{ session.user_username }}!</b></p>
                 {% else %}
-                    <p>Welcome!</p>
                 {% endif %}
                 <button type="button" class="btn btn-light" id="logout-button" onclick="logoutButton()">Logout</button>
                 <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addTaskModal">Add task</button>
@@ -119,7 +118,7 @@
                         <label for="task_description" class="form-label">Task description</label>
                         <input type="text" class="form-control" id="task_description" name="task_description">
                     </div>
-                    <input type="text" class="form-control" id="user_id" name="user_id" value="{{ session.user_id }}">
+                    <input type="text" class="form-control" id="user_id" name="user_id" value="{{ session.user_id }}" hidden>
                 </form>
             </div>
             <div class="modal-footer">
