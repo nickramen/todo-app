@@ -21,7 +21,7 @@ def index():
     user_id = session.get('user_id')
     user_username = session.get('user_username')
     
-    if 'username' not in session:
+    if 'user_username' not in session:
         response_data = {'message': 'No active sessions. Please log in.'}
         return redirect(url_for('login', message=response_data['message']))
     
