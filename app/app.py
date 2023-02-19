@@ -107,8 +107,7 @@ def task_per_day():
     
     # Make the database connection and cursor object
     # Select all the tasks from tbTasks
-    # Determine how many tasks are done and how many are undone
-    # Redirect to the home page
+    # Determine how many tasks are assigned to each day of the week
     
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
@@ -154,7 +153,6 @@ def task_done_undone():
     # Make the database connection and cursor object
     # Select all the tasks from tbTasks
     # Determine how many tasks are done and how many are undone
-    # Redirect to the home page
     
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
@@ -176,5 +174,29 @@ def task_done_undone():
         
     return task_count
 
+
+
+@app.route('/login', methods=['GET'])
+def login():
+    # Make the database connection and cursor object
+    # Fetch all the days and tasks from the database
+    # Create a dictionary that maps each day ID to a list of tasks
+    # Pass the days and tasks, along with the dictionary to the HTML template
+    # Load data for the graphs by calling the method: task_done_undone()
+    
+    with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
+        cursor = myConnection.cursor()
+    
+        cursor.execute('SELECT day_id, day_description FROM tbDays')
+        days = cursor.fetchall()
+        
+
+        
+    return render_template('login.html')
+    #return redirect(url_for('login'))
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
+    
+    
