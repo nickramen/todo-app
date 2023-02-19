@@ -64,8 +64,18 @@ def add_task():
         
         cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id))
         myConnection.commit()
-    
-        return redirect(url_for('index'))
+    return jsonify({'success': True})
+        # try:
+        #     # code that might raise an exception
+            
+        # except:
+        #     # code to handle the exception
+        #     return jsonify({'success': False})
+        # else:
+        #     # code to execute if no exception was raised
+        #     myConnection.commit()
+        #     return jsonify({'success': True})
+
 
 @app.route('/task_status', methods=['POST'])
 def task_status():
@@ -206,7 +216,6 @@ def submit_login():
             session['user_id'] = user[0]
             return jsonify({'success': True})
         else:
-            flash('Invalid username or password', 'error')
             return jsonify({'success': False})
 
 

@@ -9,16 +9,37 @@ function addNewTask() {
         method: 'POST',
         body: formData
     })
-    .then(response => response.text())
+    .then(response => response.json())
+    .then(data => {
+        const alertDiv = document.getElementById('login-alert');
+        if (data.success) {
+            // Redirect to index page if login is successful
+            alertDiv.style.display = 'block';
+            alertDiv.classList.remove('alert-danger');
+            alertDiv.classList.add('alert-success');
+            alertDiv.innerText = 'Task added successfully';
+            
+            window.location.href = 'http://127.0.0.1:5000/index';
+
+        } else {
+            const myModal = $('#addTaskModal');
+            myModal.modal('hide');
+            var inputs = document.querySelectorAll('#addTaskModal input');
+            // Reset the value of each input field
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].value = '';
+            }
+            // Display error message if login is unsuccessful
+            alertDiv.style.display = 'block';
+            alertDiv.classList.remove('alert-success');
+            alertDiv.classList.add('alert-danger');
+            alertDiv.innerText = 'Task was not added';
+            setTimeout(function() {
+                alertDiv.style.display = 'none';
+            }, 2000);
+        }
+    })
     .catch(error => console.error(error));
-    //$('#exampleModal').modal('hide');
-    // Get all the input fields in the modal
-    var inputs = document.querySelectorAll('#addTaskModal input');
-    // Reset the value of each input field
-    for (var i = 0; i < inputs.length; i++) {
-        inputs[i].value = '';
-    }
-    window.location.reload('http://127.0.0.1:5000/index');
 }
 
 //---------------------------

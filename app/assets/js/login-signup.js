@@ -16,7 +16,7 @@ function loginButton() {
             alertDiv.style.display = 'block';
             alertDiv.classList.remove('alert-danger');
             alertDiv.classList.add('alert-success');
-            alertDiv.innerText = 'Login successful. Redirecting to dashboard...';
+            alertDiv.innerText = 'Login successful. Redirecting to dashboard';
             
             setTimeout(() => {
                 window.location.href = 'http://127.0.0.1:5000/index';
