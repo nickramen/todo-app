@@ -134,3 +134,40 @@ function signupButton() {
         }, 2000);
     }
 }
+
+
+//---------------------------
+// Log Out
+//---------------------------
+function logoutButton(){
+    fetch('/submit_logout', {
+        method: 'POST',
+        body: {}
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to index page if login is successful
+            alertDiv.style.display = 'block';
+            alertDiv.innerText = '';
+            alertDiv.classList.remove('alert-danger');
+            alertDiv.classList.add('alert-success');
+            alertDiv.innerText = 'Logout successful.';
+            
+            setTimeout(() => {
+                window.location.href = 'http://127.0.0.1:5000/login';
+            }, 2000);
+        } else {
+            // Display error message if login is unsuccessful
+            alertDiv.style.display = 'block';
+            alertDiv.innerText = '';
+            alertDiv.classList.remove('alert-success');
+            alertDiv.classList.add('alert-danger');
+            alertDiv.innerText = 'Something went wrong when logging out.';
+            setTimeout(function() {
+                alertDiv.style.display = 'none';
+            }, 2000);
+        }
+    })
+    .catch(error => console.error(error));
+}

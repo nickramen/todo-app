@@ -25,7 +25,7 @@
                 {% else %}
                     <p>Welcome!</p>
                 {% endif %}
-                <button type="button" class="btn btn-light">Add task</button>
+                <button type="button" class="btn btn-light" id="logout-button" onclick="logoutButton()">Logout</button>
                 <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addTaskModal">Add task</button>
             </div>
         </nav>
@@ -160,8 +160,9 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+        <script src="{{ url_for('serve_static', path='js/login-signup.js') }}"></script>
         <script src="{{ url_for('serve_static', path='js/task-actions.js') }}"></script>
-
+        
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>

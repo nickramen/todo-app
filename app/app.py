@@ -248,6 +248,17 @@ def submit_signup():
                 return jsonify({'success': False})
 
 
+@app.route('/submit_logout', methods=['POST'])
+def submit_logout():
+    
+    try:
+        session.pop('user_id', None)
+        session.pop('user_username', None)
+        return jsonify({'success': True})
+    except:
+        return jsonify({'success': False})
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
     
