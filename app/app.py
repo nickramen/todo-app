@@ -219,6 +219,29 @@ def submit_login():
             return jsonify({'success': False})
 
 
+@app.route('/submit_signup', methods=['GET', 'POST'])
+def submit_signup():
+    
+    # Make the database connection and cursor object
+    with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
+        cursor = myConnection.cursor()
+        
+        username = request.form['signup-username']
+        email = request.form['signup-email']
+        password = request.form['signup-password']
+        confirm_password = request.form['signup-confirm-password']
+        
+        if password != confirm_password:
+            return jsonify({'success': False})
+        else:
+            try:
+                # insert new user into tbUsers with default status and rol_id
+                cursor.execute("INSERT INTO tbUsers (user_username, user_email, user_password, user_status, rol_id) VALUES (?, ?, ?, ?, ?)", (username, email, password, 1, 2))
+                myConnection.commit()
+                return jsonify({'success': True})
+            except:
+                return jsonify({'success': False})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
