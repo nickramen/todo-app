@@ -3,12 +3,13 @@
 //---------------------------
 const task_description = document.getElementById('task_description');
 const day_id = document.getElementById('day_id');
+const user_id = document.getElementById('user_id');
 const alertDiv = document.getElementById('login-alert');
 //---------------------------
 // Add new task with button
 //---------------------------
 function addNewTask() {
-    if(task_description.value == ""){
+    if(task_description.value == "" || user_id.value == ""){
         // Display error message if fields are empty
         alertDiv.style.display = 'block';
         alertDiv.innerText = '';

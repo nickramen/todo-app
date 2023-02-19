@@ -18,15 +18,18 @@ def index():
     # Pass the days and tasks, along with the dictionary to the HTML template
     # Load data for the graphs by calling the method: task_done_undone()
     
+    user_id = session.get('user_id')
+    user_username = session.get('user_username')
+    
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
     
         cursor.execute('SELECT day_id, day_description FROM tbDays')
         days = cursor.fetchall()
         
-        cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks')
+        cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ?',(user_id,))
         tasks = cursor.fetchall()
-        
+
         tasks_by_day = {day[0]: [] for day in days}
         for task in tasks:
             tasks_by_day[task[3]].append((task[0], task[1], task[2]))
@@ -35,7 +38,7 @@ def index():
     task_count = task_done_undone()
     task_per_day_count = task_per_day()
         
-    return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day, task_count=task_count,task_per_day_count=task_per_day_count)
+    return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username)
 
 
 
@@ -57,12 +60,13 @@ def add_task():
     
         task_description = request.form['task_description']
         day_id = request.form['day_id']
+        user_id = request.form['user_id']
         
         last_id = cursor.execute('SELECT MAX(task_id) FROM tbTasks').fetchone()[0]
         if last_id is None:
             last_id = 0
         
-        cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id))
+        cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, user_id))
         myConnection.commit()
     return jsonify({'success': True})
         # try:
@@ -129,8 +133,8 @@ def task_per_day():
     
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
-        
-        cursor.execute('SELECT day_id FROM tbTasks')
+        user_id = session.get('user_id')
+        cursor.execute('SELECT day_id FROM tbTasks WHERE user_id == ?',(user_id,))
         tasks = cursor.fetchall()
         
         def count_tasks(tasks):
@@ -174,8 +178,8 @@ def task_done_undone():
     
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
-        
-        cursor.execute('SELECT task_status FROM tbTasks')
+        user_id = session.get('user_id')
+        cursor.execute('SELECT task_status FROM tbTasks WHERE user_id == ?',(user_id,))
         tasks = cursor.fetchall()
         
         def count_tasks(tasks):
@@ -209,11 +213,12 @@ def submit_login():
         
         username = request.form['login-username']
         password = request.form['login-password']
-        cursor.execute("SELECT * FROM tbUsers WHERE user_username = ? AND user_password = ?", (username, password))
+        cursor.execute("SELECT user_id, user_username FROM tbUsers WHERE user_username = ? AND user_password = ?", (username, password))
         user = cursor.fetchone()
         if user:
             # set user_id as session variable
             session['user_id'] = user[0]
+            session['user_username'] = user[1]
             return jsonify({'success': True})
         else:
             return jsonify({'success': False})
