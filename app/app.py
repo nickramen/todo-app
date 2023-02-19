@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, session, jsonify
 import sqlite3
 
 app = Flask(__name__,template_folder='template')
+
+app.config['SECRET_KEY'] = 'your_secret_key_here'
 
 # Route for serving static files
 @app.route('/assets/<path:path>')
@@ -34,6 +36,12 @@ def index():
     task_per_day_count = task_per_day()
         
     return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day, task_count=task_count,task_per_day_count=task_per_day_count)
+
+
+
+#####################################################
+#                   TASK ACTIONS
+#####################################################
 
 
 @app.route('/add_task', methods=['POST'])
@@ -174,26 +182,33 @@ def task_done_undone():
         
     return task_count
 
+#####################################################
+#               LOGIN AND SIGNUP
+#####################################################
 
-
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+            
+    return render_template('login.html')
+
+@app.route('/submit_login', methods=['GET', 'POST'])
+def submit_login():
     # Make the database connection and cursor object
-    # Fetch all the days and tasks from the database
-    # Create a dictionary that maps each day ID to a list of tasks
-    # Pass the days and tasks, along with the dictionary to the HTML template
-    # Load data for the graphs by calling the method: task_done_undone()
-    
     with sqlite3.connect("../db/src/database/mydb.sqlite3") as myConnection:
         cursor = myConnection.cursor()
-    
-        cursor.execute('SELECT day_id, day_description FROM tbDays')
-        days = cursor.fetchall()
         
+        username = request.form['login-username']
+        password = request.form['login-password']
+        cursor.execute("SELECT * FROM tbUsers WHERE user_username = ? AND user_password = ?", (username, password))
+        user = cursor.fetchone()
+        if user:
+            # set user_id as session variable
+            session['user_id'] = user[0]
+            return jsonify({'success': True})
+        else:
+            flash('Invalid username or password', 'error')
+            return jsonify({'success': False})
 
-        
-    return render_template('login.html')
-    #return redirect(url_for('login'))
 
 
 if __name__ == "__main__":

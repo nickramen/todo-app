@@ -60,3 +60,7 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+.login-inputs{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}

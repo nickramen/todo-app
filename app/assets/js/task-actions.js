@@ -58,7 +58,6 @@ input.addEventListener('click', function() {
         // Set the delete button from the modal
         var deleteButton = document.querySelector('#task-delete-button');
         deleteButton.setAttribute('task-id', id);
-        console.log(id);
     });
 });
 

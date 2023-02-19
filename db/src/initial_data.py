@@ -11,6 +11,20 @@ try:
     cursor.executescript("""
         PRAGMA foreign_keys = ON;
         
+        CREATE TABLE tbRoles (
+            rol_id INTEGER PRIMARY KEY,
+            rol_description VARCHAR(50)
+        );
+        
+        CREATE TABLE tbUsers (
+            user_id INTEGER PRIMARY KEY, 
+            user_username VARCHAR(50),
+            user_password VARCHAR(100),
+            user_email VARCHAR(100),
+            user_status INT(1),
+            rol_id INTEGER REFERENCES tbRoles(rol_id)
+        );
+        
         CREATE TABLE tbDays (
             day_id INTEGER PRIMARY KEY,
             day_description VARCHAR(50)
@@ -22,6 +36,12 @@ try:
             task_status INT(1),
             day_id INTEGER REFERENCES tbDays(day_id)
         );
+        
+        INSERT INTO tbRoles VALUES (1,'Administrator');
+        INSERT INTO tbRoles VALUES (2,'User');
+        
+        INSERT INTO tbUsers VALUES (1,'admin','admin123','test@gmail.com',1,1);
+        INSERT INTO tbUsers VALUES (2,'nickramen','baleada','mytest@gmail.com',1,2);
         
         INSERT INTO tbDays VALUES (1,'Monday');
         INSERT INTO tbDays VALUES (2,'Tuesday');
