@@ -121,6 +121,11 @@
     color: #343a40;
 }
 
+.menu a:active {
+    background-color: #ffffff;
+    color: #343a40;
+}
+
 .sm-info{
     background-color: rgba(54, 162, 235, 0.2);
     border: 2px solid rgb(54, 162, 235);
@@ -196,3 +201,40 @@
     z-index: 10;
 }
 /* end references from AdminLTE */
+
+
+/* satisfaction survey style*/
+.survey {
+    margin-bottom: 20px;
+  }
+  
+  .stars {
+    display: inline-block;
+    width: 150px;
+    height: 30px;
+    position: relative;
+    margin-left: 10px;
+  }
+  
+  .stars input[type="radio"] {
+    display: none;
+  }
+  
+  .stars label {
+    display: block;
+    float: right;
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    background: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-star-512.png');
+    
+    background-size: contain;
+    cursor: pointer;
+  }
+  
+  .stars input[type="radio"]:checked ~ label {
+    background: url('https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-512.png');
+    background-size: contain;
+  }
+  

@@ -166,10 +166,8 @@ def admin_task_per_category():
             categories.append(row[0])
             task_count.append(row[1])
         
-        #categories = json.dumps(categories)
-        
-        print(categories)
         print(task_count)
+        print(categories)
         
     return categories, task_count
 
