@@ -74,3 +74,125 @@
     margin-top: 30px;
 }
 
+#menu-container{
+    background-color: gray;
+}
+
+#main-content{
+    margin-left: 200px;
+}
+
+/* Menu container */
+.menu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    background-color: gray;
+    padding-top: 60px;
+    z-index: 1;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+  /* Menu items */
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    margin: 20px 0;
+}
+
+.menu a {
+    display: block;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background-color: #ffffff;
+    color: #343a40;
+}
+
+.sm-info{
+    background-color: rgba(54, 162, 235, 0.2);
+    border: 2px solid rgb(54, 162, 235);
+}
+
+.sm-success{
+    background-color: rgba(75, 192, 192, 0.2);
+    border: 2px solid rgb(75, 192, 192);
+}
+
+.sm-warning{
+    background-color: rgba(255, 205, 86, 0.2);
+    border: 2px solid rgb(255, 205, 86);
+    
+}
+
+.sm-danger{
+    background-color: rgba(255, 99, 132, 0.2);
+    border: 2px solid rgb(255, 99, 132);
+}
+
+
+/* from AdminLTE */
+.small-box {
+    border-radius: 0.25rem;
+    box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+    display: block;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 10px;
+}
+
+.small-box .icon>i.ion-icon {
+    font-size: 70px;
+    top: 20px;
+}
+.icon-inner, .ionicon, svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+.small-box>.inner {
+    padding: 10px;
+}
+.small-box h3 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+    padding: 0;
+    white-space: nowrap;
+}
+.small-box .icon>i {
+    font-size: 90px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    transition: -webkit-transform .3s linear;
+    transition: transform .3s linear;
+    transition: transform .3s linear,-webkit-transform .3s linear;
+}
+.small-box .icon {
+    color: rgba(0,0,0,.15);
+    z-index: 0;
+}
+.small-box>.small-box-footer {
+    background-color: rgba(0,0,0,.1);
+    color: rgba(255,255,255,.8);
+    display: block;
+    padding: 3px 0;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    z-index: 10;
+}
+/* end references from AdminLTE */
