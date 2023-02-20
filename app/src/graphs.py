@@ -1,6 +1,7 @@
 from flask import Flask, request, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
+import json
 
 app = Flask(__name__,template_folder='template')
 
@@ -137,6 +138,55 @@ def admin_task_per_day():
         admin_task_per_day_count = count_tasks(tasks)
         
     return admin_task_per_day_count
+
+
+@app.route('/admin_task_per_category', methods=['GET'])
+def admin_task_per_category():
+    
+    # Make the database connection and cursor object
+    # Select all the tasks from tbTasks
+    # Determine how many tasks are assigned to each day of the week
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        
+        cursor.execute('''
+                        SELECT tbCategories.cat_description, COUNT(tbTasks.task_id) AS task_count
+                        FROM tbCategories
+                        LEFT JOIN tbTasks ON tbCategories.cat_id = tbTasks.cat_id
+                        GROUP BY tbCategories.cat_description;
+                        ''')
+        
+        tasks = cursor.fetchall()
+        
+        categories = []
+        task_count = []
+        
+        for row in tasks:
+            categories.append(row[0])
+            task_count.append(row[1])
+        
+        #categories = json.dumps(categories)
+        
+        print(categories)
+        print(task_count)
+        
+    return categories, task_count
+
+@app.route('/admin_overview_category_total', methods=['GET'])
+def admin_overview_category_total():
+    
+    # Make the database connection and cursor object
+    # Select all the tasks from tbTasks
+    # Determine how many tasks are assigned to each day of the week
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        cursor.execute('SELECT COUNT(*) FROM tbCategories')
+        
+        categories = cursor.fetchone()[0]
+        
+    return categories
     
 @app.route('/admin_task_done_undone', methods=['GET'])
 def admin_task_done_undone():

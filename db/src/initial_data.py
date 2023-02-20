@@ -19,9 +19,9 @@ try:
         CREATE TABLE tbUsers (
             user_id INTEGER PRIMARY KEY, 
             user_username VARCHAR(50),
-            user_password VARCHAR(100),
-            user_email VARCHAR(100),
-            user_status INT(1),
+            user_password VARCHAR(50),
+            user_email VARCHAR(50),
+            user_status INTEGER(1),
             rol_id INTEGER REFERENCES tbRoles(rol_id)
         );
         
@@ -30,11 +30,17 @@ try:
             day_description VARCHAR(50)
         );
         
+        CREATE TABLE tbCategories (
+            cat_id INTEGER PRIMARY KEY,
+            cat_description VARCHAR(50)
+        );
+        
         CREATE TABLE tbTasks (
             task_id INTEGER PRIMARY KEY, 
-            task_description VARCHAR(250),
-            task_status INT(1),
+            task_description VARCHAR(500),
+            task_status INTEGER(1),
             day_id INTEGER REFERENCES tbDays(day_id),
+            cat_id INTEGER REFERENCES tbCategories(cat_id),
             user_id INTEGER REFERENCES tbUsers(user_id)
         );
         
@@ -52,16 +58,24 @@ try:
         INSERT INTO tbDays VALUES (6,'Saturday');
         INSERT INTO tbDays VALUES (7,'Sunday');
         
-        INSERT INTO tbTasks VALUES (1, 'Complete project report', 1, 1, 2);
-        INSERT INTO tbTasks VALUES (2, 'Attend team meeting', 1, 2, 2);
-        INSERT INTO tbTasks VALUES (3, 'Submit expense report', 0, 3, 2);
-        INSERT INTO tbTasks VALUES (4, 'Review code changes', 1, 4, 2);
-        INSERT INTO tbTasks VALUES (5, 'Prepare for client presentation', 1, 5, 2);
-        INSERT INTO tbTasks VALUES (6, 'Update website content', 0, 6, 2);
-        INSERT INTO tbTasks VALUES (7, 'Call vendor for new equipment', 1, 7, 2);
-        INSERT INTO tbTasks VALUES (8, 'Draft marketing email', 1, 1, 2);
-        INSERT INTO tbTasks VALUES (9, 'Attend project kickoff meeting', 1, 2, 2);
-        INSERT INTO tbTasks VALUES (10, 'Review performance metrics', 0, 3, 2);
+        INSERT INTO tbCategories VALUES (1,'Personal');
+        INSERT INTO tbCategories VALUES (2,'Work');
+        INSERT INTO tbCategories VALUES (3,'School');
+        INSERT INTO tbCategories VALUES (4,'Workout');
+        INSERT INTO tbCategories VALUES (5,'Social');
+        INSERT INTO tbCategories VALUES (6,'Home');
+        INSERT INTO tbCategories VALUES (7,'Travel');
+        
+        INSERT INTO tbTasks VALUES (1, 'Complete project report', 1, 1, 1, 2);
+        INSERT INTO tbTasks VALUES (2, 'Attend team meeting', 1, 2, 2, 2);
+        INSERT INTO tbTasks VALUES (3, 'Submit expense report', 0, 3, 3, 2);
+        INSERT INTO tbTasks VALUES (4, 'Review code changes', 1, 4, 4, 2);
+        INSERT INTO tbTasks VALUES (5, 'Prepare for client presentation', 1, 5, 5, 2);
+        INSERT INTO tbTasks VALUES (6, 'Update website content', 0, 6, 6, 2);
+        INSERT INTO tbTasks VALUES (7, 'Call vendor for new equipment', 1, 7, 7, 2);
+        INSERT INTO tbTasks VALUES (8, 'Draft marketing email', 1, 1, 1, 2);
+        INSERT INTO tbTasks VALUES (9, 'Attend project kickoff meeting', 1, 2, 2, 2);
+        INSERT INTO tbTasks VALUES (10, 'Review performance metrics', 0, 3, 3, 2);
     """)
     
     # commit the changes and close the database connection 

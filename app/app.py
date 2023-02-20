@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
-from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total
+from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category
 
 app = Flask(__name__,template_folder='template')
 
@@ -34,6 +34,9 @@ def index():
             cursor.execute('SELECT day_id, day_description FROM tbDays')
             days = cursor.fetchall()
             
+            cursor.execute('SELECT cat_id, cat_description FROM tbCategories')
+            categories = cursor.fetchall()
+            
             cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ?',(user_id,))
             tasks = cursor.fetchall()
 
@@ -45,7 +48,7 @@ def index():
         task_count = task_done_undone()
         task_per_day_count = task_per_day()
             
-        return render_template('index.html', days=days, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username)
+        return render_template('index.html', days=days, categories=categories, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username)
     
     
 @app.route('/admin', methods=['GET'])
@@ -63,8 +66,12 @@ def admin():
         admin_per_day_count = admin_task_per_day()
         admin_task_total = admin_overview_task_total()
         admin_user_total = admin_overview_user_total()
-    
-    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total)
+        admin_category_total = admin_overview_category_total()
+        admin_task_per_category_count = admin_task_per_category()
+        categories = admin_task_per_category_count[0]
+        task_per_category = admin_task_per_category_count[1]
+        
+    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category)
 
 
 #####################################################
@@ -85,13 +92,14 @@ def add_task():
     
         task_description = request.form['task_description']
         day_id = request.form['day_id']
+        cat_id = request.form['cat_id']
         user_id = request.form['user_id']
         
         last_id = cursor.execute('SELECT MAX(task_id) FROM tbTasks').fetchone()[0]
         if last_id is None:
             last_id = 0
         
-        cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, user_id))
+        cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, cat_id, user_id))
         myConnection.commit()
     return jsonify({'success': True})
 
