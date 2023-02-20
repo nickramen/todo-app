@@ -1,15 +1,15 @@
 # weekly to-do list by nickramen
 weekly to-do list is an app that helps you organize the things you have to do during your week. It has an intuitive interface that makes it easy for you to get started.
 
-## main features:
+## Main features:
 - Tasks management: You can create tasks for a certain day of the week and assign it a catergory. You can also delete tasks you will no longer be doing. Finally, you can check the tasks that you have already done.
 - Dashboards: Get reports in form of graphs of your overall activity.
 
-## includes:
+## Includes:
 - User dashboard
 - Admin dashboard
 
-## more:
+## Other:
 - Field validations
 - Session validations
 
@@ -24,8 +24,8 @@ This is a flask app built using Python and JS mainly. As for the database, I am 
 
 - First we need to activate the virtual environment. For that, we are going to look for the following folder in our terminal and paste the activation command:
 
--- Folder: /db
--- Command: .\env\Scripts\activate
+  - Folder: /db
+  - Command: .\env\Scripts\activate
 
 - Then we need to create the database. There might be already a database created but I would recommend you to create it again using the script so you can have better visualizations:
 
@@ -33,17 +33,17 @@ This is a flask app built using Python and JS mainly. As for the database, I am 
 - Go back to /db/src and using the terminal you have previously activated run the script 'initial_data.py' with this command: python initial_data.py. (You need to have Python installed in you computer previously) 
 - Finally, to run the app go to this folder: /app and run the script 'app.py' with this command: python app,py
 
-### user credentials
+### User credentials
 
 Now that you have launched the app it will load in your localhost. Visit: http://127.0.0.1:5000/login and the login page will show up. Use the following credentials for you to start testing the appp, or create your own user account in the signup form.
 
-#### administrator
+#### Administrator
 - username: admin
 - password: admin1234
 
-#### users
+#### Users
 - username: nickramen
-- password: nickrmane
+- password: nickramen
 
 - username: nicole
 - username nicole
@@ -57,4 +57,4 @@ Feel free to contact me if you have any questions or any feedback after testing 
 
 
 
-Thank you so much for reading and comming to my profile!!!
+Thank you so much for reading and coming to my profile!!!
