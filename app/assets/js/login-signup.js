@@ -47,7 +47,11 @@ function loginButton() {
                 alertDiv.innerText = 'Login successful. Redirecting to dashboard';
                 
                 setTimeout(() => {
-                    window.location.href = 'http://127.0.0.1:5000/index';
+                    if (data.rol_id == 1) {
+                        window.location.href = 'http://127.0.0.1:5000/admin';
+                    } else if (data.rol_id == 2) {
+                        window.location.href = 'http://127.0.0.1:5000/index';
+                    }
                 }, 2000);
             } else {
                 // Display error message if login is unsuccessful
@@ -153,7 +157,6 @@ function logoutButton(){
             alertDiv.classList.remove('alert-danger');
             alertDiv.classList.add('alert-success');
             alertDiv.innerText = 'Logout successful.';// Redirect to index page if login is successful
-            
             
             setTimeout(() => {
                 window.location.href = 'http://127.0.0.1:5000/login';

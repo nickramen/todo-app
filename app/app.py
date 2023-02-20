@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
-from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day
+from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total
 
 app = Flask(__name__,template_folder='template')
 
@@ -50,11 +50,21 @@ def index():
     
 @app.route('/admin', methods=['GET'])
 def admin():
+
+    if 'user_username' not in session:
+        response_data = {'message': 'No active sessions. Please log in.'}
+        return redirect(url_for('login', message=response_data['message']))
+    elif 'rol_id' in session and session['rol_id'] == 2:
+        response_data = {'message': 'Sorry, you do not have permission to see this page.'}
+        
+        return redirect(url_for('index', message=response_data['message']))
+    else:
+        admin_task_count =  admin_task_done_undone()
+        admin_per_day_count = admin_task_per_day()
+        admin_task_total = admin_overview_task_total()
+        admin_user_total = admin_overview_user_total()
     
-    admin_task_count =  admin_task_done_undone()
-    admin_per_day_count = admin_task_per_day()
-    
-    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count)
+    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total)
 
 
 #####################################################
@@ -148,13 +158,14 @@ def submit_login():
         
         username = request.form['login-username']
         password = request.form['login-password']
-        cursor.execute("SELECT user_id, user_username FROM tbUsers WHERE user_username = ? AND user_password = ?", (username, password))
+        cursor.execute("SELECT user_id, user_username, rol_id FROM tbUsers WHERE user_username = ? AND user_password = ?", (username, password))
         user = cursor.fetchone()
         if user:
             # set user_id as session variable
             session['user_id'] = user[0]
             session['user_username'] = user[1]
-            return jsonify({'success': True})
+            session['rol_id'] = user[2]
+            return jsonify({'success': True, 'rol_id': user[2]})
         else:
             return jsonify({'success': False})
 

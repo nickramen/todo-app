@@ -25,7 +25,6 @@
                 {% else %}
                 {% endif %}
                 <button type="button" class="btn btn-light" id="logout-button" onclick="logoutButton()">Logout</button>
-                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addTaskModal">Add task</button>
             </div>
         </nav>
 
@@ -48,10 +47,14 @@
                     </div>
                 </div>
             </div>
-            
+            <br>
             <div>
                 <br>
-                <h4>Weekly tasks</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>Weekly tasks</h4>
+                    <button type="button" class="btn btn-dark ml-auto" data-toggle="modal" data-target="#addTaskModal" id="add-button">Add task</button>
+                </div>
+                <br>
                 <table class="table" id="weekly-tasks-table">
                     <thead>
                         <tr>
