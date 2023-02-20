@@ -24,14 +24,14 @@ This is a flask app built using Python and JS mainly. As for the database, I am 
 
 - First we need to activate the virtual environment. For that, we are going to look for the following folder in our terminal and paste the activation command:
 
-  - Folder: /db
-  - Command: .\env\Scripts\activate
+  - Folder: `/db`
+  - Command: `.\env\Scripts\activate`
 
 - Then we need to create the database. There might be already a database created but I would recommend you to create it again using the script so you can have better visualizations:
 
-- Delete the existing database found in the folder /db/src/database
-- Go back to /db/src and using the terminal you have previously activated run the script 'initial_data.py' with this command: python initial_data.py. (You need to have Python installed in you computer previously) 
-- Finally, to run the app go to this folder: /app and run the script 'app.py' with this command: python app,py
+- Delete the existing database found in the folder `/db/src/database`
+- Go back to /db/src and using the terminal you have previously activated run the script `initial_data.py` with this command: `python initial_data.py`. (You need to have Python installed in you computer previously) 
+- Finally, to run the app go to this folder: `/app` and run the script `app.py` with this command: `python app.py`
 
 ### User credentials
 
