@@ -13,6 +13,23 @@ def serve_static(path):
     return send_from_directory('assets', path)
 
 
+
+########################
+#  USER SATISFACTION
+########################
+@app.route('/user_satisfaction', methods=['POST'])
+def user_satisfaction():
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        
+        user_id = session.get('user_id')
+        rate = cursor.execute("SELECT user_satisfaction FROM tbUsers WHERE user_id = ?",(user_id,)).fetchone()[0]
+        print(rate)
+    return rate
+
+
+
 ###############
 # USER GRAPHS #
 ###############

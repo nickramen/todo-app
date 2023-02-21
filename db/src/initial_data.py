@@ -22,7 +22,8 @@ try:
             user_password VARCHAR(50),
             user_email VARCHAR(50),
             user_status INTEGER(1),
-            rol_id INTEGER REFERENCES tbRoles(rol_id)
+            rol_id INTEGER REFERENCES tbRoles(rol_id),
+            user_satisfaction INTEGER
         );
         
         CREATE TABLE tbDays (
@@ -47,18 +48,18 @@ try:
         INSERT INTO tbRoles VALUES (1,'Administrator');
         INSERT INTO tbRoles VALUES (2,'User');
         
-        INSERT INTO tbUsers VALUES (1,'admin','admin123','test@gmail.com',1,1);
-        INSERT INTO tbUsers VALUES (2,'nickramen','nickramen','mytest@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (3,'nicole','nicole','nicole@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (4,'sarahjones','ilovecats','sjones@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (5,'johndoe','password456','johndoe@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (6,'janedoe','password789','janedoe@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (7,'mikebrown','mbrown123','mikebrown@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (8,'jenniferlee','jl123456','jlee@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (9,'davidwilliams','dwilliams','dwilliams@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (10,'amyparker','aparker123','aparker@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (11,'adamjones','ajones456','ajones@gmail.com',1,2);
-        INSERT INTO tbUsers VALUES (12,'sarahsmith','ssmith123','ssmith@gmail.com',1,2);
+        INSERT INTO tbUsers VALUES (1,'admin','admin123','test@gmail.com',1,1,0);
+        INSERT INTO tbUsers VALUES (2,'nickramen','nickramen','mytest@gmail.com',1,2,5);
+        INSERT INTO tbUsers VALUES (3,'nicole','nicole','nicole@gmail.com',1,2,4);
+        INSERT INTO tbUsers VALUES (4,'sarahjones','ilovecats','sjones@gmail.com',1,2,0);
+        INSERT INTO tbUsers VALUES (5,'johndoe','password456','johndoe@gmail.com',1,2,4);
+        INSERT INTO tbUsers VALUES (6,'janedoe','password789','janedoe@gmail.com',1,2,5);
+        INSERT INTO tbUsers VALUES (7,'mikebrown','mbrown123','mikebrown@gmail.com',1,2,2);
+        INSERT INTO tbUsers VALUES (8,'jenniferlee','jl123456','jlee@gmail.com',1,2,3);
+        INSERT INTO tbUsers VALUES (9,'davidwilliams','dwilliams','dwilliams@gmail.com',1,2,4);
+        INSERT INTO tbUsers VALUES (10,'amyparker','aparker123','aparker@gmail.com',1,2,3);
+        INSERT INTO tbUsers VALUES (11,'adamjones','ajones456','ajones@gmail.com',1,2,2);
+        INSERT INTO tbUsers VALUES (12,'sarahsmith','ssmith123','ssmith@gmail.com',1,2,5);
 
         
         INSERT INTO tbDays VALUES (1,'Monday');

@@ -1,4 +1,45 @@
 //---------------------------
+// USERS SATISFACTION
+//---------------------------
+
+//Display saved rate
+const satisfactionRate = document.getElementById('userSatisfactionRate');
+var satisfactionRateValue = satisfactionRate.value
+var rateInputs = document.getElementsByName('rating')
+
+for(var inputs = 0; inputs < rateInputs.length; inputs++){
+    if(rateInputs[inputs].value == satisfactionRateValue){
+        rateInputs[inputs].checked = true;
+    }
+}
+
+//Edit rate when star is clicked
+rateInputs.forEach(function(rateInputs) {
+    rateInputs.addEventListener('click', function() {
+        // Get the value of the clicked input
+        var value = this.value;
+        // Call a function and pass the id as an argument
+        update_satisfaction_rate(value);
+    });
+});
+function update_satisfaction_rate(value) {
+    fetch('/update_satisfaction_rate', {
+        method: 'POST',
+        body: value
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.success) {
+            //window.location.href = 'http://127.0.0.1:5000/index';
+        } else {
+        }
+    })
+    .catch(error => console.error(error));
+}
+
+
+
+//---------------------------
 // GRAPHS FOR USERS
 //---------------------------
 

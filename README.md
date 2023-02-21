@@ -51,7 +51,7 @@ Now that you have launched the app it will load in your localhost. Visit: http:/
 Use the two users above since they have data assigned to them in the initial data.
 
 
-### Questions of Feedback?
+### Questions or Feedback?
 
 Feel free to contact me if you have any questions or any feedback after testing the app.
 

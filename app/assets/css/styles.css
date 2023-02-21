@@ -206,21 +206,21 @@
 /* satisfaction survey style*/
 .survey {
     margin-bottom: 20px;
-  }
-  
-  .stars {
+}
+
+.stars {
     display: inline-block;
     width: 150px;
     height: 30px;
     position: relative;
     margin-left: 10px;
-  }
-  
-  .stars input[type="radio"] {
+}
+
+.stars input[type="radio"] {
     display: none;
-  }
-  
-  .stars label {
+}
+
+.stars label {
     display: block;
     float: right;
     width: 30px;
@@ -231,10 +231,9 @@
     
     background-size: contain;
     cursor: pointer;
-  }
-  
-  .stars input[type="radio"]:checked ~ label {
+}
+
+.stars input[type="radio"]:checked ~ label {
     background: url('https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-512.png');
     background-size: contain;
-  }
-  
+}

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
-from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category
+from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction
 
 app = Flask(__name__,template_folder='template')
 
@@ -47,8 +47,9 @@ def index():
                 
         task_count = task_done_undone()
         task_per_day_count = task_per_day()
+        satisfaction_rate = user_satisfaction()
             
-        return render_template('index.html', days=days, categories=categories, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username)
+        return render_template('index.html', days=days, categories=categories, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username,satisfaction_rate=satisfaction_rate)
     
     
 @app.route('/admin', methods=['GET'])
@@ -195,7 +196,7 @@ def submit_signup():
         else:
             try:
                 # insert new user into tbUsers with default status and rol_id
-                cursor.execute("INSERT INTO tbUsers (user_username, user_email, user_password, user_status, rol_id) VALUES (?, ?, ?, ?, ?)", (username, email, password, 1, 2))
+                cursor.execute("INSERT INTO tbUsers (user_username, user_email, user_password, user_status, rol_id) VALUES (?, ?, ?, ?, ?, ?)", (username, email, password, 1, 2, 0))
                 myConnection.commit()
                 return jsonify({'success': True})
             except:
@@ -211,6 +212,27 @@ def submit_logout():
         return jsonify({'success': True})
     except:
         return jsonify({'success': False})
+
+
+@app.route('/update_satisfaction_rate', methods=['POST'])
+def update_satisfaction_rate():
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        
+        user_id = session.get('user_id')
+        userRate = request.get_data(as_text=True)
+        
+        try:
+            cursor.execute('UPDATE tbUsers SET user_satisfaction = ? WHERE user_id = ?',(userRate,user_id))
+            myConnection.commit()
+            return jsonify({'success': True})
+        except:
+            return jsonify({'success': False})
+
+
+
+
 
 
 if __name__ == "__main__":
