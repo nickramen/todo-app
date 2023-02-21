@@ -3,15 +3,18 @@
 //---------------------------
 
 //Display saved rate
-const satisfactionRate = document.getElementById('userSatisfactionRate');
-var satisfactionRateValue = satisfactionRate
+var satisfactionRate = document.getElementById('userSatisfactionRate');
+var satisfactionRateValue = satisfactionRate.value
 var rateInputs = document.getElementsByName('rating')
 
-for(var inputs = 0; inputs < rateInputs.length; inputs++){
-    if(rateInputs[inputs].value == satisfactionRateValue){
-        rateInputs[inputs].checked = true;
+if(satisfactionRateValue !== 0 || satisfactionRateValue !== ''){
+    for(var inputs = 0; inputs < rateInputs.length; inputs++){
+        if(rateInputs[inputs].value == satisfactionRateValue){
+            rateInputs[inputs].checked = true;
+        }
     }
 }
+
 
 //Edit rate when star is clicked
 rateInputs.forEach(function(rateInputs) {
