@@ -270,3 +270,29 @@ def admin_overview_user_total():
         admin_total_user = count_users(users)
         
     return admin_total_user
+
+
+
+@app.route('/admin_overview_user_satisfaction', methods=['GET'])
+def admin_overview_user_satisfaction():
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        
+        data = cursor.execute('SELECT user_satisfaction FROM tbUsers').fetchall()
+        
+        # Filter out users who haven't taken the survey (i.e., whose rating is 0)
+        ratings = [rating[0] for rating in data if rating[0] != 0]
+        
+        # Calculate the percentage of users who gave each rating
+        counts = [0] * 5
+        for rating in ratings:
+            counts[rating-1] += 1
+
+        total = sum(counts)
+        percentages = [int(count/total*100) if total > 0 else 0 for count in counts]
+        
+        # Calculate the overall user satisfaction score
+        satisfaction_score = (percentages[0]/100 * 20) + (percentages[1]/100 * 40) + (percentages[2]/100 * 60) + (percentages[3]/100 * 80) + (percentages[4]/100 * 100)
+
+        return satisfaction_score

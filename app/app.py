@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
-from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction
+from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction, admin_overview_user_satisfaction
 
 app = Flask(__name__,template_folder='template')
 
@@ -69,10 +69,11 @@ def admin():
         admin_user_total = admin_overview_user_total()
         admin_category_total = admin_overview_category_total()
         admin_task_per_category_count = admin_task_per_category()
+        admin_user_satisfaction = admin_overview_user_satisfaction()
         categories = admin_task_per_category_count[0]
         task_per_category = admin_task_per_category_count[1]
         
-    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category)
+    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category,admin_user_satisfaction=admin_user_satisfaction)
 
 
 #####################################################
@@ -229,7 +230,6 @@ def update_satisfaction_rate():
             return jsonify({'success': True})
         except:
             return jsonify({'success': False})
-
 
 
 

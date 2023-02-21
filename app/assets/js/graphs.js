@@ -4,7 +4,7 @@
 
 //Display saved rate
 const satisfactionRate = document.getElementById('userSatisfactionRate');
-var satisfactionRateValue = satisfactionRate.value
+var satisfactionRateValue = satisfactionRate
 var rateInputs = document.getElementsByName('rating')
 
 for(var inputs = 0; inputs < rateInputs.length; inputs++){
