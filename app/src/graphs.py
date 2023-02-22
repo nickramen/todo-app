@@ -107,6 +107,41 @@ def task_done_undone():
     return task_count
 
 
+@app.route('/task_per_category_count', methods=['GET'])
+def task_per_category_count():
+    
+    # Make the database connection and cursor object
+    # Select all the tasks from tbTasks
+    # Determine how many tasks are assigned to each day of the week
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        user_id = session.get('user_id')
+        
+        cursor.execute('''
+                        SELECT tbCategories.cat_description, COUNT(tbTasks.task_id) AS task_count
+                        FROM tbCategories
+                        LEFT JOIN tbTasks ON tbCategories.cat_id = tbTasks.cat_id
+                        LEFT JOIN tbUsers ON tbTasks.user_id = tbTasks.user_id
+                        WHERE tbTasks.user_id = ?
+                        GROUP BY tbCategories.cat_description
+                        ''',(user_id,))
+        
+        tasks = cursor.fetchall()
+        
+        categories = []
+        task_count = []
+        
+        for row in tasks:
+            categories.append(row[0])
+            task_count.append(row[1])
+            
+        print(categories)
+        print(task_count)
+        
+    return categories, task_count
+
+
 ################
 # ADMIN GRAPHS #
 ################

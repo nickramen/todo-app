@@ -116,6 +116,10 @@ new Chart(ctx2, {
     },
 });
 
+if(satisfactionRateValue !== 0 || satisfactionRateValue !== ''){
+
+}
+
 
 const ctx3 = document.getElementById('myChart3');
 var ctx3Data = document.getElementById("myChart3Data");
@@ -126,7 +130,7 @@ var ctx3DataLabelsValue = ctx3DataLabels.value
 new Chart(ctx3, {
     type: 'bar',
     data: {
-        labels: ['Home', 'Personal', 'School', 'Social', 'Travel', 'Work', 'Work'],
+        labels: ['Home', 'Personal', 'School', 'Social', 'Travel', 'Workout', 'Work'],
         datasets: [{
             axis: 'y',
             label: 'Tasks per category',

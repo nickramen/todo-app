@@ -27,7 +27,7 @@ function loginButton() {
         alertDiv.innerText = 'Login failed. One or more fields are empty.';
         setTimeout(function() {
             alertDiv.style.display = 'none';
-        }, 2000);
+        }, 1000);
     }
     else{
         const form = document.querySelector('form');
@@ -52,7 +52,7 @@ function loginButton() {
                     } else if (data.rol_id == 2) {
                         window.location.href = 'http://127.0.0.1:5000/index';
                     }
-                }, 2000);
+                }, 1000);
             } else {
                 // Display error message if login is unsuccessful
                 alertDiv.style.display = 'block';
@@ -62,7 +62,7 @@ function loginButton() {
                 alertDiv.innerText = 'Login failed. Invalid username or password.';
                 setTimeout(function() {
                     alertDiv.style.display = 'none';
-                }, 2000);
+                }, 1000);
             }
         })
         .catch(error => console.error(error));
@@ -84,7 +84,7 @@ function signupButton() {
         alertDiv.innerText = 'Signup failed. One or more fields are empty.';
         setTimeout(function() {
             alertDiv.style.display = 'none';
-        }, 2000);
+        }, 1000);
     }
     else if(signup_password.value == signup_confirm_password.value){ //check if both passwords are the same
 
@@ -105,7 +105,7 @@ function signupButton() {
                 alertDiv.innerText = 'Signup successful. Now please log in.';
                 setTimeout(function() {
                     alertDiv.style.display = 'none';
-                }, 2000);
+                }, 1000);
 
                 const loginCard = document.getElementById('login-card');
                 const signupCard = document.getElementById('signup-card');
@@ -136,7 +136,7 @@ function signupButton() {
         alertDiv.innerText = 'Signup failed. Passwords do not match.';
         setTimeout(function() {
             alertDiv.style.display = 'none';
-        }, 2000);
+        }, 1000);
     }
 }
 
@@ -160,7 +160,7 @@ function logoutButton(){
             
             setTimeout(() => {
                 window.location.href = 'http://127.0.0.1:5000/login';
-            }, 2000);
+            }, 1000);
         } else {
             // Display error message if login is unsuccessful
             alertDiv.style.display = 'block';
@@ -170,7 +170,7 @@ function logoutButton(){
             alertDiv.innerText = 'Something went wrong when logging out.';
             setTimeout(function() {
                 alertDiv.style.display = 'none';
-            }, 2000);
+            }, 1000);
         }
     })
     .catch(error => console.error(error));
@@ -189,7 +189,7 @@ if (message && message !== "") {
     alertDiv.innerText = message;
     setTimeout(function() {
         alertDiv.style.display = 'none';
-    }, 2000);
+    }, 1000);
 }
 else if(message == ""){
     alertDiv.style.display = 'none';

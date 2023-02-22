@@ -18,7 +18,7 @@ function addNewTask() {
         alertDiv2.innerText = 'Task was not added. Do not leave empty fields.'+ day_id.value;
         setTimeout(function() {
             alertDiv2.style.display = 'none';
-        }, 2000);
+        }, 1000);
     }
     else if (day_id.value == "Select a day"){
         // Display error message if day is not selected
@@ -29,7 +29,7 @@ function addNewTask() {
         alertDiv2.innerText = 'Task was not added. Select a day.' + day_id.value;
         setTimeout(function() {
             alertDiv2.style.display = 'none';
-        }, 2000);
+        }, 1000);
     }
     else{
         const form = document.querySelector('form');
@@ -66,7 +66,7 @@ function addNewTask() {
                 alertDiv2.innerText = 'Task was not added';
                 setTimeout(function() {
                     alertDiv2.style.display = 'none';
-                }, 2000);
+                }, 1000);
             }
         })
         .catch(error => console.error(error));
@@ -142,7 +142,7 @@ function taskDelete() {
             alertDiv2.innerText = 'Task was not deleted';
             setTimeout(function() {
                 alertDiv2.style.display = 'none';
-            }, 2000);
+            }, 1000);
         }
     })
     .catch(error => console.error(error));

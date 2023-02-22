@@ -62,6 +62,13 @@
                             <input type="text" id="myChart2Data" value="{{ task_count | tojson }}" hidden></input>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div>
+                            <canvas id="myChart3"></canvas>
+                            <input type="text" id="myChart3Data" value="{{ tasks_per_category | tojson }}" hidden></input>
+                            <input type="text" id="myChart3DataLabels" value="{{ task_categories | tojson }}" hidden></input>
+                        </div>
+                    </div>
                 </div>
             </div>
             <br>

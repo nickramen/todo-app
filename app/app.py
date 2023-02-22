@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
-from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction, admin_overview_user_satisfaction
+from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction, admin_overview_user_satisfaction,task_per_category_count
 
 app = Flask(__name__,template_folder='template')
 
@@ -48,8 +48,10 @@ def index():
         task_count = task_done_undone()
         task_per_day_count = task_per_day()
         satisfaction_rate = user_satisfaction()
+        task_categories = task_per_category_count()[0]
+        tasks_per_category = task_per_category_count()[1]
             
-        return render_template('index.html', days=days, categories=categories, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username,satisfaction_rate=satisfaction_rate)
+        return render_template('index.html', days=days, categories=categories, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username,satisfaction_rate=satisfaction_rate,task_categories=task_categories,tasks_per_category=tasks_per_category)
     
     
 @app.route('/admin', methods=['GET'])
