@@ -135,9 +135,6 @@ def task_per_category_count():
         for row in tasks:
             categories.append(row[0])
             task_count.append(row[1])
-            
-        print(categories)
-        print(task_count)
         
     return categories, task_count
 
@@ -331,3 +328,26 @@ def admin_overview_user_satisfaction():
         satisfaction_score = (percentages[0]/100 * 20) + (percentages[1]/100 * 40) + (percentages[2]/100 * 60) + (percentages[3]/100 * 80) + (percentages[4]/100 * 100)
 
         return satisfaction_score
+
+
+@app.route('/admin_user_active_inactive', methods=['GET'])
+def admin_user_active_inactive():
+        
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        cursor.execute('SELECT user_status FROM tbUsers')
+        users = cursor.fetchall()
+        
+        def count_users(tasks):
+            active_count = 0
+            inactive_count = 0
+            for user in users:
+                if user[0] == 1:
+                    active_count += 1
+                elif user[0] == 0:
+                    inactive_count += 1
+            return [active_count, inactive_count]
+
+        user_count = count_users(users)
+        
+    return user_count

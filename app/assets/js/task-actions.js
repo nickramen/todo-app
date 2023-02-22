@@ -78,12 +78,14 @@ function addNewTask() {
 //---------------------------
 // Get all elements with class "list-of-tasks"
 var inputs = document.querySelectorAll('.list-of-tasks');
+
 // Attach a click event to each element
 inputs.forEach(function(input) {
 input.addEventListener('click', function() {
         // Get the id of the clicked input
         var id = this.id;
-        // Call a function and pass the id as an argument
+
+        // Call the taskStatus function with the id
         taskStatus(id);
     });
 });
@@ -92,9 +94,15 @@ function taskStatus(id) {
         method: 'POST',
         body: id
     })
-    .then(response => response.text())
+    .then(response => response.json())
+    .then(data =>{
+
+        if(data.success){
+            window.location.reload('http://127.0.0.1:5000/index');
+        }
+        else{}
+    })
     .catch(error => console.error(error));
-    window.location.reload('http://127.0.0.1:5000/index');
 }
 
 //---------------------------
@@ -148,3 +156,51 @@ function taskDelete() {
     .catch(error => console.error(error));
 }
 
+//EDIT THE TASK DESCRIPTION
+document.querySelectorAll('.task-item').forEach(function(label) {
+    label.addEventListener('click', function(event) {
+        // Save a reference to the original label text
+        var originalText = this.innerText;
+
+        // Set the label to be editable
+        this.contentEditable = true;
+        this.classList.add('editing');
+
+        // Focus on the label so the user can start typing right away
+        this.focus();
+
+        // Listen for the 'blur' event to save the changes
+        this.addEventListener('blur', function() {
+            // Get the new task description
+            var taskId = this.dataset.taskId;
+            var newDescription = this.innerText;
+
+            // Only update the task if the description has changed
+            if (newDescription !== originalText) {
+                // Call a function to update the task in the database
+                updateTask(taskId, newDescription);
+            }
+
+            // Set the label back to non-editable mode
+            this.contentEditable = false;
+            this.classList.remove('editing');
+        });
+    });
+});
+
+
+function updateTask(taskId, newDescription) {
+    fetch('/update_task', {
+        method: 'POST',
+        body: JSON.stringify({taskId: taskId, newDescription: newDescription})
+
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Reload the page
+            //window.location.reload();
+        }
+    })
+    .catch(error => console.error(error));
+}

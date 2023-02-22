@@ -57,9 +57,9 @@ try:
         INSERT INTO tbUsers VALUES (7,'mikebrown','mbrown123','mikebrown@gmail.com',1,2,2);
         INSERT INTO tbUsers VALUES (8,'jenniferlee','jl123456','jlee@gmail.com',1,2,3);
         INSERT INTO tbUsers VALUES (9,'davidwilliams','dwilliams','dwilliams@gmail.com',1,2,4);
-        INSERT INTO tbUsers VALUES (10,'amyparker','aparker123','aparker@gmail.com',1,2,3);
-        INSERT INTO tbUsers VALUES (11,'adamjones','ajones456','ajones@gmail.com',1,2,2);
-        INSERT INTO tbUsers VALUES (12,'sarahsmith','ssmith123','ssmith@gmail.com',1,2,5);
+        INSERT INTO tbUsers VALUES (10,'amyparker','aparker123','aparker@gmail.com',0,2,3);
+        INSERT INTO tbUsers VALUES (11,'adamjones','ajones456','ajones@gmail.com',0,2,2);
+        INSERT INTO tbUsers VALUES (12,'sarahsmith','ssmith123','ssmith@gmail.com',0,2,5);
 
         
         INSERT INTO tbDays VALUES (1,'Monday');

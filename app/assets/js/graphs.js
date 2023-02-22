@@ -116,9 +116,6 @@ new Chart(ctx2, {
     },
 });
 
-if(satisfactionRateValue !== 0 || satisfactionRateValue !== ''){
-
-}
 
 
 const ctx3 = document.getElementById('myChart3');
@@ -166,57 +163,29 @@ new Chart(ctx3, {
     }
 });
 
-// new Chart(ctx3, {
-//     type: 'polarArea',
-//     data: {
-//         labels: ['Home', 'Personal', 'School', 'Social', 'Travel', 'Work', 'Workout'],
-//         datasets: [{
-//             label: 'Tasks per category',
-//             data: [1,2,2,1,1,2,1],
-//             backgroundColor: [
-//                 'rgba(255, 99, 132, 0.2)',
-//                 'rgba(255, 159, 64, 0.2)',
-//                 'rgba(255, 205, 86, 0.2)',
-//                 'rgba(75, 192, 192, 0.2)',
-//                 'rgba(54, 162, 235, 0.2)',
-//                 'rgba(153, 102, 255, 0.2)',
-//                 'rgba(201, 203, 207, 0.2)'
-//             ],
-//             borderColor: [
-//                 'rgb(255, 99, 132)',
-//                 'rgb(255, 159, 64)',
-//                 'rgb(255, 205, 86)',
-//                 'rgb(75, 192, 192)',
-//                 'rgb(54, 162, 235)',
-//                 'rgb(153, 102, 255)',
-//                 'rgb(201, 203, 207)'
-//             ],
-//             hoverOffset: 4
-//         }]
-//     },
-//     options: {}
-// });
 
 
-// google.charts.load("current", {packages:["corechart"]});
-// google.charts.setOnLoadCallback(drawChart);
-// function drawChart() {
-//     var data = google.visualization.arrayToDataTable([
-//         ['Category', 'Task Count'],
-//         ['Home',    11],
-//         ['Personal',9],
-//         ['School',  10],
-//         ['Social',  6],
-//         ['Travel',  7],
-//         ['Work',    11],
-//         ['Workout', 7]
-//     ]);
+const ctx4 = document.getElementById('myChart4');
+var ctx4Data = document.getElementById("myChart4Data");  
+var ctx4DataValue = JSON.parse(ctx4Data.value);
 
-//     var options = {
-//         title: 'Top used categories',
-//         is3D: true,
-//     };
-
-//     var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-//     chart.draw(data, options);
-// }
+new Chart(ctx4, {
+    type: 'pie',
+    data: {
+        labels: ['Active Users', 'Inactive Users'],
+        datasets: [{
+            label: 'Users Status',
+            data: ctx4DataValue,
+            fill: false,
+            backgroundColor: [
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(54, 162, 235, 0.2)'
+            ],
+            borderColor: [
+            'rgb(255, 205, 86)',
+            'rgb(54, 162, 235)'
+            ],
+            hoverOffset: 4
+        }]
+    },
+});

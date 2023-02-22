@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
-from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction, admin_overview_user_satisfaction,task_per_category_count
+from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction, admin_overview_user_satisfaction,task_per_category_count,admin_user_active_inactive
+import json
 
 app = Flask(__name__,template_folder='template')
 
@@ -74,8 +75,9 @@ def admin():
         admin_user_satisfaction = admin_overview_user_satisfaction()
         categories = admin_task_per_category_count[0]
         task_per_category = admin_task_per_category_count[1]
+        active_inactive_users = admin_user_active_inactive()
         
-    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category,admin_user_satisfaction=admin_user_satisfaction)
+    return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category,admin_user_satisfaction=admin_user_satisfaction,active_inactive_users=active_inactive_users)
 
 
 #####################################################
@@ -126,13 +128,13 @@ def task_status():
         if(taskStatus == 1):
             cursor.execute('UPDATE tbTasks SET task_status = ? WHERE task_id = ?', (0, taskId))
             myConnection.commit()
+            return jsonify({'success': True})
         elif(taskStatus == 0):
             cursor.execute('UPDATE tbTasks SET task_status = ? WHERE task_id = ?', (1, taskId))
             myConnection.commit()
+            return jsonify({'success': True})
         else:
-            return "Failed on updating task status"
-    
-        return redirect(url_for('index'))
+            return jsonify({'success': False})
 
 
 @app.route('/delete_task', methods=['POST'])
@@ -147,9 +149,31 @@ def delete_task():
         cursor = myConnection.cursor()
         
         taskId = request.get_data(as_text=True)
-        cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+        try:
+            cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+            return jsonify({'success': True})
+        except:
+            return jsonify({'success': False})
+    
+    
+@app.route('/update_task', methods=['POST'])
+def update_task():
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
         
-        return jsonify({'success': True})
+        data = request.get_data(as_text=True)
+        data_dict = json.loads(data)
+        task_id = data_dict.get('taskId')
+        new_description = data_dict.get('newDescription')
+        
+        print(task_id,new_description)
+        try:
+            cursor.execute('UPDATE tbTasks SET task_description = ? WHERE task_id = ?', (new_description,task_id))
+            myConnection.commit()
+            return jsonify({'success': True})
+        except:
+            return jsonify({'success': False})
 
 
 #####################################################
