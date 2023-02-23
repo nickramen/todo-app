@@ -198,8 +198,8 @@ function updateTask(taskId, newDescription) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Reload the page
-            //window.location.reload();
+            //Reload the page
+            window.location.reload();
         }
     })
     .catch(error => console.error(error));

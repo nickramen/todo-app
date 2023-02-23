@@ -1,6 +1,6 @@
-//---------------------------
-// USERS SATISFACTION
-//---------------------------
+//-----------------------
+// USERS SATISFACTION //
+//-----------------------
 
 //Display saved rate
 var satisfactionRate = document.getElementById('userSatisfactionRate');
@@ -15,7 +15,6 @@ if(satisfactionRateValue !== 0 || satisfactionRateValue !== ''){
     }
 }
 
-
 //Edit rate when star is clicked
 rateInputs.forEach(function(rateInputs) {
     rateInputs.addEventListener('click', function() {
@@ -25,6 +24,7 @@ rateInputs.forEach(function(rateInputs) {
         update_satisfaction_rate(value);
     });
 });
+
 function update_satisfaction_rate(value) {
     fetch('/update_satisfaction_rate', {
         method: 'POST',
@@ -42,10 +42,11 @@ function update_satisfaction_rate(value) {
 
 
 
-//---------------------------
-// GRAPHS FOR USERS
-//---------------------------
+//---------------------
+// GRAPHS FOR USERS //
+//---------------------
 
+// Tasks per day
 const ctx = document.getElementById('myChart1');
 var ctxData = document.getElementById("myChart1Data");  
 var ctxDataValue = JSON.parse(ctxData.value);
@@ -90,7 +91,7 @@ new Chart(ctx, {
     }
 });
 
-
+// Task Done/Undone
 const ctx2 = document.getElementById('myChart2');
 var ctx2Data = document.getElementById("myChart2Data");  
 var ctx2DataValue = JSON.parse(ctx2Data.value);
@@ -116,8 +117,7 @@ new Chart(ctx2, {
     },
 });
 
-
-
+// Task per category
 const ctx3 = document.getElementById('myChart3');
 var ctx3Data = document.getElementById("myChart3Data");
 var ctx3DataLabels = document.getElementById("myChart3DataLabels");    
@@ -161,31 +161,4 @@ new Chart(ctx3, {
             }
         }
     }
-});
-
-
-
-const ctx4 = document.getElementById('myChart4');
-var ctx4Data = document.getElementById("myChart4Data");  
-var ctx4DataValue = JSON.parse(ctx4Data.value);
-
-new Chart(ctx4, {
-    type: 'pie',
-    data: {
-        labels: ['Active Users', 'Inactive Users'],
-        datasets: [{
-            label: 'Users Status',
-            data: ctx4DataValue,
-            fill: false,
-            backgroundColor: [
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-            'rgb(255, 205, 86)',
-            'rgb(54, 162, 235)'
-            ],
-            hoverOffset: 4
-        }]
-    },
 });

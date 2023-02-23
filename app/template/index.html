@@ -52,18 +52,21 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div>
+                            <!--Tasks per day -->
                             <canvas id="myChart1"></canvas>
                             <input type="text" id="myChart1Data" value="{{ task_per_day_count | tojson }}" hidden></input>
                         </div>
                     </div>
                     <div class="col-md-2" style="width: 200px;">
                         <div>
+                            <!--Done and undone task -->
                             <canvas id="myChart2"></canvas>
                             <input type="text" id="myChart2Data" value="{{ task_count | tojson }}" hidden></input>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div>
+                            <!-- Tasks per category -->
                             <canvas id="myChart3"></canvas>
                             <input type="text" id="myChart3Data" value="{{ tasks_per_category | tojson }}" hidden></input>
                             <input type="text" id="myChart3DataLabels" value="{{ task_categories | tojson }}" hidden></input>
@@ -82,7 +85,7 @@
                 <table class="table" id="weekly-tasks-table">
                     <thead>
                         <tr>
-                        <!--lists days of the week-->
+                        <!-- Lists days of the week -->
                         {% for day in days %}
                             <td><b>{{ day[1] }}</b></td>
                         {% endfor %}
@@ -120,7 +123,7 @@
 
         </div>
 
-        <!--Modal-->
+        <!--Add task Modal-->
         <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -165,7 +168,7 @@
         </div>
         </div>
 
-    <!-- Modal -->
+    <!-- Delete task Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -200,8 +203,8 @@
         
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="{{ url_for('serve_static', path='js/graphs.js') }}"></script>
-        
+        <script src="{{ url_for('serve_static', path='js/graphs-user.js') }}"></script>
+        <script src="{{ url_for('serve_static', path='js/graphs-admin.js') }}"></script>
 
     </body>
 </html>

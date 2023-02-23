@@ -1,22 +1,63 @@
-//---------------------------
-// Constant fields
-//---------------------------
-const login_username = document.getElementById('login-username');
-const login_password = document.getElementById('login-password');
+//----------------------------------
+// LOGIN-SIGNUP PAGE UI BEHAVIOR //
+//----------------------------------
 
-const signup_username = document.getElementById('signup-username');
-const signup_email = document.getElementById('signup-email');
-const signup_password = document.getElementById('signup-password');
-const signup_confirm_password = document.getElementById('signup-confirm-password');
+// Get the login and signup cards
+const loginCard = document.getElementById('login-card');
+const signupCard = document.getElementById('signup-card');
+
+// Get the login and signup selectors
+const loginSelector = document.getElementById('login-selector');
+const signupSelector = document.getElementById('signup-selector');
+
+// Get the login and signup headers
+const loginHeader = document.getElementById('login-card-header');
+const signupHeader = document.getElementById('signup-card-header');
+
+// Default style values
+signupCard.style.display = 'none';
+signupSelector.style.backgroundColor = "gray";
+signupHeader.style.display = 'none';
+
+loginSelector.addEventListener("click", function() {
+    loginCard.style.display = "block";
+    signupCard.style.display = "none";
+    loginHeader.style.display = 'block';
+    signupHeader.style.display = 'none';
+    loginSelector.style.backgroundColor = "#343a40";
+    signupSelector.style.backgroundColor = "gray";
+});
+
+// Add click event listener to the signup selector
+signupSelector.addEventListener('click', function() {
+    loginCard.style.display = 'none';
+    signupCard.style.display = 'block';
+    loginHeader.style.display = 'none';
+    signupHeader.style.display = 'block';
+    loginSelector.style.backgroundColor = '';
+    loginSelector.style.color = 'white';
+    loginSelector.style.backgroundColor = "gray";
+    signupSelector.style.backgroundColor = '#343a40';
+    signupSelector.style.color = 'white';
+});
+
+
+//----------
+// ALERT //
+//----------
 
 const alertDiv = document.getElementById('login-alert');
 alertDiv.style.display = 'none';
 
-//---------------------------
-// Log In
-//---------------------------
-function loginButton() {
 
+//----------
+// LOGIN //
+//----------
+
+const login_username = document.getElementById('login-username');
+const login_password = document.getElementById('login-password');
+
+function loginButton() {
     //Check no fields are empty
     if(login_username.value == "" || login_password.value == ""){
         // Display error message if fields are empty
@@ -70,9 +111,15 @@ function loginButton() {
 }
 
 
-//---------------------------
-// Sign Up
-//---------------------------
+//-----------
+// SIGNUP //
+//-----------
+
+const signup_username = document.getElementById('signup-username');
+const signup_email = document.getElementById('signup-email');
+const signup_password = document.getElementById('signup-password');
+const signup_confirm_password = document.getElementById('signup-confirm-password');
+
 function signupButton() {
 
     if(signup_username.value == "" || signup_email.value == "" || signup_password.value == "" || signup_confirm_password.value ==""){
@@ -140,10 +187,9 @@ function signupButton() {
     }
 }
 
-
-//---------------------------
-// Log Out
-//---------------------------
+//-----------
+// LOGOUT //
+//-----------
 function logoutButton(){
     fetch('/submit_logout', {
         method: 'POST',
@@ -176,9 +222,10 @@ function logoutButton(){
     .catch(error => console.error(error));
 }
 
-//---------------------------
-// Redirect to Login when there is no active session
-//---------------------------
+//----------------------------------------------------
+// REDIRECT TO LOGIN IF THERE IS NO ACTIVE SESSION //
+//---------------------------------------------------
+
 const params = new URLSearchParams(window.location.search);
 const message = params.get('message');
 if (message && message !== "") {
