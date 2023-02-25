@@ -40,8 +40,6 @@ function update_satisfaction_rate(value) {
     .catch(error => console.error(error));
 }
 
-
-
 //---------------------
 // GRAPHS FOR USERS //
 //---------------------

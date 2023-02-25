@@ -1,6 +1,24 @@
-//----------------------------------
-// LOGIN-SIGNUP PAGE UI BEHAVIOR //
-//----------------------------------
+// ALERTS
+function myAlertMessage(message, type){
+    const alertDiv2 = document.getElementById('login-alert');
+
+    if(type == 'error'){
+        alertDiv2.style.display = 'block';
+        alertDiv2.innerText = '';
+        alertDiv2.classList.remove('alert-success');
+        alertDiv2.classList.add('alert-danger');
+        alertDiv2.innerText = message;
+    }
+    else if(type == 'success'){
+        alertDiv2.style.display = 'block';
+        alertDiv2.innerText = '';
+        alertDiv2.classList.remove('alert-danger');
+        alertDiv2.classList.add('alert-success');
+        alertDiv2.innerText = message;
+        
+    }
+
+}
 
 // Get the login and signup cards
 const loginCard = document.getElementById('login-card');
@@ -41,31 +59,18 @@ signupSelector.addEventListener('click', function() {
     signupSelector.style.color = 'white';
 });
 
-
-//----------
-// ALERT //
-//----------
-
+// ALERT
 const alertDiv = document.getElementById('login-alert');
 alertDiv.style.display = 'none';
 
 
-//----------
-// LOGIN //
-//----------
-
+// LOGIN
 const login_username = document.getElementById('login-username');
 const login_password = document.getElementById('login-password');
 
 function loginButton() {
-    //Check no fields are empty
     if(login_username.value == "" || login_password.value == ""){
-        // Display error message if fields are empty
-        alertDiv.style.display = 'block';
-        alertDiv.innerText = '';
-        alertDiv.classList.remove('alert-success');
-        alertDiv.classList.add('alert-danger');
-        alertDiv.innerText = 'Login failed. One or more fields are empty.';
+        myAlertMessage('Login failed. One or more fields are empty.', 'error')
         setTimeout(function() {
             alertDiv.style.display = 'none';
         }, 1000);
@@ -80,12 +85,7 @@ function loginButton() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Redirect to index page if login is successful
-                alertDiv.style.display = 'block';
-                alertDiv.innerText = '';
-                alertDiv.classList.remove('alert-danger');
-                alertDiv.classList.add('alert-success');
-                alertDiv.innerText = 'Login successful. Redirecting to dashboard';
+                myAlertMessage('Login successful. Redirecting to dashboard', 'success')
                 
                 setTimeout(() => {
                     if (data.rol_id == 1) {
@@ -95,12 +95,7 @@ function loginButton() {
                     }
                 }, 1000);
             } else {
-                // Display error message if login is unsuccessful
-                alertDiv.style.display = 'block';
-                alertDiv.innerText = '';
-                alertDiv.classList.remove('alert-success');
-                alertDiv.classList.add('alert-danger');
-                alertDiv.innerText = 'Login failed. Invalid username or password.';
+                myAlertMessage('Login failed. Invalid username or password.', 'error')
                 setTimeout(function() {
                     alertDiv.style.display = 'none';
                 }, 1000);
@@ -110,11 +105,7 @@ function loginButton() {
     }
 }
 
-
-//-----------
-// SIGNUP //
-//-----------
-
+// SIGNUP 
 const signup_username = document.getElementById('signup-username');
 const signup_email = document.getElementById('signup-email');
 const signup_password = document.getElementById('signup-password');
@@ -123,17 +114,12 @@ const signup_confirm_password = document.getElementById('signup-confirm-password
 function signupButton() {
 
     if(signup_username.value == "" || signup_email.value == "" || signup_password.value == "" || signup_confirm_password.value ==""){
-        // Display error message if fields are empty
-        alertDiv.style.display = 'block';
-        alertDiv.innerText = '';
-        alertDiv.classList.remove('alert-success');
-        alertDiv.classList.add('alert-danger');
-        alertDiv.innerText = 'Signup failed. One or more fields are empty.';
+        myAlertMessage('Signup failed. One or more fields are empty.', 'error')
         setTimeout(function() {
             alertDiv.style.display = 'none';
         }, 1000);
     }
-    else if(signup_password.value == signup_confirm_password.value){ //check if both passwords are the same
+    else if(signup_password.value == signup_confirm_password.value){
 
         const form = document.querySelector('form');
         const formData = new FormData(form);
@@ -144,12 +130,7 @@ function signupButton() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Redirect to index page if login is successful
-                alertDiv.style.display = 'block';
-                alertDiv.innerText = '';
-                alertDiv.classList.remove('alert-danger');
-                alertDiv.classList.add('alert-success');
-                alertDiv.innerText = 'Signup successful. Now please log in.';
+                myAlertMessage('Signup successful. Now please log in.', 'sucess')
                 setTimeout(function() {
                     alertDiv.style.display = 'none';
                 }, 1000);
@@ -161,12 +142,7 @@ function signupButton() {
                 signupCard.style.display = "none";
 
             } else {
-                // Display error message if login is unsuccessful
-                alertDiv.style.display = 'block';
-                alertDiv.innerText = '';
-                alertDiv.classList.remove('alert-success');
-                alertDiv.classList.add('alert-danger');
-                alertDiv.innerText = 'Signup failed.';
+                myAlertMessage('Signup failed.', 'error')
                 setTimeout(function() {
                     alertDiv.style.display = 'none';
                 }, 2000);
@@ -175,21 +151,14 @@ function signupButton() {
         .catch(error => console.error(error));
     }
     else{
-        // Display error message if fields are empty
-        alertDiv.style.display = 'block';
-        alertDiv.innerText = '';
-        alertDiv.classList.remove('alert-success');
-        alertDiv.classList.add('alert-danger');
-        alertDiv.innerText = 'Signup failed. Passwords do not match.';
+        myAlertMessage('Signup failed. Passwords do not match.', 'error')
         setTimeout(function() {
             alertDiv.style.display = 'none';
         }, 1000);
     }
 }
 
-//-----------
-// LOGOUT //
-//-----------
+// LOGOUT
 function logoutButton(){
     fetch('/submit_logout', {
         method: 'POST',
@@ -198,22 +167,13 @@ function logoutButton(){
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alertDiv.style.display = 'block';
-            alertDiv.innerText = '';
-            alertDiv.classList.remove('alert-danger');
-            alertDiv.classList.add('alert-success');
-            alertDiv.innerText = 'Logout successful.';// Redirect to index page if login is successful
+            myAlertMessage('Logout successful.', 'success')
             
             setTimeout(() => {
                 window.location.href = 'http://127.0.0.1:5000/login';
             }, 1000);
         } else {
-            // Display error message if login is unsuccessful
-            alertDiv.style.display = 'block';
-            alertDiv.innerText = '';
-            alertDiv.classList.remove('alert-success');
-            alertDiv.classList.add('alert-danger');
-            alertDiv.innerText = 'Something went wrong when logging out.';
+            myAlertMessage('Something went wrong when logging out.', 'error')
             setTimeout(function() {
                 alertDiv.style.display = 'none';
             }, 1000);
@@ -222,10 +182,7 @@ function logoutButton(){
     .catch(error => console.error(error));
 }
 
-//----------------------------------------------------
-// REDIRECT TO LOGIN IF THERE IS NO ACTIVE SESSION //
-//---------------------------------------------------
-
+// REDIRECT TO LOGIN IF THERE IS NO ACTIVE SESSION 
 const params = new URLSearchParams(window.location.search);
 const message = params.get('message');
 if (message && message !== "") {
