@@ -13,13 +13,11 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 def serve_static(path):
     return send_from_directory('assets', path)
 
+# DASHBOARDS
+
+# Load index template, Render data to template, Load data for the graphs
 @app.route('/index', methods=['GET'])
 def index():
-    # Make the database connection and cursor object
-    # Fetch all the days and tasks from the database
-    # Create a dictionary that maps each day ID to a list of tasks
-    # Pass the days and tasks, along with the dictionary to the HTML template
-    # Load data for the graphs by calling the method: task_done_undone()
     
     user_id = session.get('user_id')
     user_username = session.get('user_username')
@@ -31,20 +29,15 @@ def index():
     else:
         with create_connection() as myConnection:
             cursor = myConnection.cursor()
-        
             cursor.execute('SELECT day_id, day_description FROM tbDays')
             days = cursor.fetchall()
-            
             cursor.execute('SELECT cat_id, cat_description FROM tbCategories')
             categories = cursor.fetchall()
-            
             cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ?',(user_id,))
             tasks = cursor.fetchall()
-
             tasks_by_day = {day[0]: [] for day in days}
             for task in tasks:
                 tasks_by_day[task[3]].append((task[0], task[1], task[2]))
-                
                 
         task_count = task_done_undone()
         task_per_day_count = task_per_day()
@@ -53,11 +46,11 @@ def index():
         tasks_per_category = task_per_category_count()[1]
             
         return render_template('index.html', days=days, categories=categories, tasks=tasks, tasks_by_day=tasks_by_day,task_count=task_count,task_per_day_count=task_per_day_count, user_id=user_id,user_username=user_username,satisfaction_rate=satisfaction_rate,task_categories=task_categories,tasks_per_category=tasks_per_category)
-    
-    
+
+# Load admin template, Render data to template, Load data for the graphs
 @app.route('/admin', methods=['GET'])
 def admin():
-
+    
     if 'user_username' not in session:
         response_data = {'message': 'No active sessions. Please log in.'}
         return redirect(url_for('login', message=response_data['message']))
@@ -79,19 +72,12 @@ def admin():
         
     return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category,admin_user_satisfaction=admin_user_satisfaction,active_inactive_users=active_inactive_users)
 
+# TASK ACTIONS
 
-#####################################################
-#                   TASK ACTIONS
-#####################################################
-
-
+# Get the task description and day ID from the form, Get the last task ID from 
+# the database for the new id, Insert the new task into the db with status set as undone (0)
 @app.route('/add_task', methods=['POST'])
 def add_task():
-    # Make the database connection and cursor object
-    # Get the task description and day ID from the form
-    # Get the last task ID from the database
-    # Insert the new task into the database with status set as undone (0)
-    # Redirect to the home page
     
     with create_connection() as myConnection:
         cursor = myConnection.cursor()
@@ -105,19 +91,17 @@ def add_task():
         if last_id is None:
             last_id = 0
         
-        cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, cat_id, user_id))
-        myConnection.commit()
-    return jsonify({'success': True})
+        try:
+            cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, cat_id, user_id))
+            myConnection.commit()
+            return jsonify({'success': True})
+        except:
+            return jsonify({'success': False})
 
-
+# Get the id from the request body, If task is undone(0) set it as done. Otherwise, 
+# if the task is done(1) set it as undone. Update task status using the id
 @app.route('/task_status', methods=['POST'])
 def task_status():
-    
-    # Make the database connection and cursor object
-    # Get the id from the request body
-    # If task is undone(0) set it as done. Otherwise, if the task is done(1) set it as undone.
-    # Update task status using the id
-    # Redirect to the home page
     
     with create_connection() as myConnection:
         cursor = myConnection.cursor()
@@ -136,14 +120,9 @@ def task_status():
         else:
             return jsonify({'success': False})
 
-
+# Get the id from the request body and Delete task status using the id
 @app.route('/delete_task', methods=['POST'])
 def delete_task():
-    
-    # Make the database connection and cursor object
-    # Get the id from the request body
-    # Delete task status using the id
-    # Redirect to the home page
     
     with create_connection() as myConnection:
         cursor = myConnection.cursor()
@@ -155,7 +134,7 @@ def delete_task():
         except:
             return jsonify({'success': False})
     
-    
+# Update task description
 @app.route('/update_task', methods=['POST'])
 def update_task():
     
@@ -175,20 +154,17 @@ def update_task():
         except:
             return jsonify({'success': False})
 
-
-#####################################################
-#               LOGIN AND SIGNUP
-#####################################################
+# LOGIN AND SIGNUP
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
             
     return render_template('login.html')
 
-
+# Log into the account and create user sessions
 @app.route('/submit_login', methods=['GET', 'POST'])
 def submit_login():
-    # Make the database connection and cursor object
+    
     with create_connection() as myConnection:
         cursor = myConnection.cursor()
         
@@ -197,7 +173,6 @@ def submit_login():
         cursor.execute("SELECT user_id, user_username, rol_id FROM tbUsers WHERE user_username = ? AND user_password = ?", (username, password))
         user = cursor.fetchone()
         if user:
-            # set user_id as session variable
             session['user_id'] = user[0]
             session['user_username'] = user[1]
             session['rol_id'] = user[2]
@@ -205,11 +180,10 @@ def submit_login():
         else:
             return jsonify({'success': False})
 
-
+# Signup to the app, creates a new user account
 @app.route('/submit_signup', methods=['GET', 'POST'])
 def submit_signup():
-    
-    # Make the database connection and cursor object
+
     with create_connection() as myConnection:
         cursor = myConnection.cursor()
         
@@ -222,7 +196,7 @@ def submit_signup():
             return jsonify({'success': False})
         else:
             try:
-                # insert new user into tbUsers with default status and rol_id
+                # insert new user into tbUsers with default status(1=active) and rol_id (2=user)
                 cursor.execute("INSERT INTO tbUsers (user_username, user_email, user_password, user_status, rol_id) VALUES (?, ?, ?, ?, ?, ?)", (username, email, password, 1, 2, 0))
                 myConnection.commit()
                 return jsonify({'success': True})
@@ -240,7 +214,7 @@ def submit_logout():
     except:
         return jsonify({'success': False})
 
-
+# Let users rate their satisfaction with the app, 1-5 star survey, when user account is created user satisfaction is set to 0, then they can update it from 1-5
 @app.route('/update_satisfaction_rate', methods=['POST'])
 def update_satisfaction_rate():
     
@@ -256,10 +230,6 @@ def update_satisfaction_rate():
             return jsonify({'success': True})
         except:
             return jsonify({'success': False})
-
-
-
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
