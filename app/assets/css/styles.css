@@ -111,6 +111,7 @@
     display: block;
     padding: 10px 20px;
     font-size: 18px;
+    font-weight: 500;
     color: #ffffff;
     text-decoration: none;
     transition: 0.3s;
@@ -121,9 +122,9 @@
     color: #343a40;
 }
 
-.menu a:active {
-    background-color: #ffffff;
+.menu-item.active{
     color: #343a40;
+    background-color: #ffffff;
 }
 
 .sm-info{
