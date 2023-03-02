@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
 import sqlite3
 from src.database import create_connection
@@ -33,7 +34,7 @@ def index():
             days = cursor.fetchall()
             cursor.execute('SELECT cat_id, cat_description FROM tbCategories')
             categories = cursor.fetchall()
-            cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ?',(user_id,))
+            cursor.execute('SELECT task_id, task_description, task_status, day_id FROM tbTasks WHERE user_id == ? AND is_deleted == 0',(user_id,))
             tasks = cursor.fetchall()
             tasks_by_day = {day[0]: [] for day in days}
             for task in tasks:
@@ -86,13 +87,14 @@ def add_task():
         day_id = request.form['day_id']
         cat_id = request.form['cat_id']
         user_id = request.form['user_id']
+        current_time = datetime.datetime.now()
         
         last_id = cursor.execute('SELECT MAX(task_id) FROM tbTasks').fetchone()[0]
         if last_id is None:
             last_id = 0
         
         try:
-            cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, cat_id, user_id))
+            cursor.execute('INSERT INTO tbTasks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', (last_id + 1, task_description, 0, day_id, cat_id, user_id, current_time, '', 0))
             myConnection.commit()
             return jsonify({'success': True})
         except:
@@ -107,14 +109,16 @@ def task_status():
         cursor = myConnection.cursor()
     
         taskId = request.get_data(as_text=True)
+        current_time = datetime.datetime.now()
+        
         taskStatus = cursor.execute('SELECT task_status FROM tbTasks WHERE task_id == ?', (taskId,)).fetchone()[0]
         
         if(taskStatus == 1):
-            cursor.execute('UPDATE tbTasks SET task_status = ? WHERE task_id = ?', (0, taskId))
+            cursor.execute('UPDATE tbTasks SET task_status = ?, edit_date = ? WHERE task_id = ?', (0, current_time, taskId))
             myConnection.commit()
             return jsonify({'success': True})
         elif(taskStatus == 0):
-            cursor.execute('UPDATE tbTasks SET task_status = ? WHERE task_id = ?', (1, taskId))
+            cursor.execute('UPDATE tbTasks SET task_status = ?, edit_date = ? WHERE task_id = ?', (1, current_time, taskId))
             myConnection.commit()
             return jsonify({'success': True})
         else:
@@ -129,7 +133,8 @@ def delete_task():
         
         taskId = request.get_data(as_text=True)
         try:
-            cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+            #cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+            cursor.execute('UPDATE tbTasks SET is_deleted = 1 WHERE task_id == ?',(taskId,))
             return jsonify({'success': True})
         except:
             return jsonify({'success': False})
@@ -145,10 +150,11 @@ def update_task():
         data_dict = json.loads(data)
         task_id = data_dict.get('taskId')
         new_description = data_dict.get('newDescription')
+        current_time = datetime.datetime.now()
         
         print(task_id,new_description)
         try:
-            cursor.execute('UPDATE tbTasks SET task_description = ? WHERE task_id = ?', (new_description,task_id))
+            cursor.execute('UPDATE tbTasks SET task_description = ?, edit_date = ? WHERE task_id = ?', (new_description,current_time,task_id))
             myConnection.commit()
             return jsonify({'success': True})
         except:
