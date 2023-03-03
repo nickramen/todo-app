@@ -116,11 +116,24 @@ def task_status():
         if(taskStatus == 1):
             cursor.execute('UPDATE tbTasks SET task_status = ?, edit_date = ? WHERE task_id = ?', (0, current_time, taskId))
             myConnection.commit()
-            return jsonify({'success': True})
+            # Get the updated task count data
+            cursor.execute('SELECT COUNT(*) FROM tbTasks WHERE task_status = ?', (1,))
+            tasks_done = cursor.fetchone()[0]
+            cursor.execute('SELECT COUNT(*) FROM tbTasks WHERE task_status = ?', (0,))
+            tasks_undone = cursor.fetchone()[0]
+            task_count = [tasks_done, tasks_undone]
+            return jsonify({'success': True, 'task_count': task_count})
+        
         elif(taskStatus == 0):
             cursor.execute('UPDATE tbTasks SET task_status = ?, edit_date = ? WHERE task_id = ?', (1, current_time, taskId))
             myConnection.commit()
-            return jsonify({'success': True})
+            # Get the updated task count data
+            cursor.execute('SELECT COUNT(*) FROM tbTasks WHERE task_status = ?', (1,))
+            tasks_done = cursor.fetchone()[0]
+            cursor.execute('SELECT COUNT(*) FROM tbTasks WHERE task_status = ?', (0,))
+            tasks_undone = cursor.fetchone()[0]
+            task_count = [tasks_done, tasks_undone]
+            return jsonify({'success': True, 'task_count': task_count})
         else:
             return jsonify({'success': False})
 

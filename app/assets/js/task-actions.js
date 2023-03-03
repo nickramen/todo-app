@@ -90,7 +90,16 @@ function taskStatus(id) {
     .then(data =>{
 
         if(data.success){
-            window.location.reload('http://127.0.0.1:5000/index');
+            //window.location.reload('http://127.0.0.1:5000/index');
+            
+            // Update the value of the myChart2Data input field with the new task count data
+            var ctx2Data = document.getElementById("myChart2Data");  
+            ctx2Data.value = JSON.stringify(data.task_count);
+
+            // Get the chart object and update its data
+            var chart = Chart.getChart('myChart2');
+            chart.data.datasets[0].data = data.task_count;
+            chart.update();
         }
         else{}
     })
