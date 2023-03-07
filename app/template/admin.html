@@ -20,8 +20,8 @@
         <div class="menu-container">
             <nav class="menu">
             <ul>
-                <li><a class="menu-item active" href="http://127.0.0.1:5000/admin">Dashboard</a></li>
-                <li><a class="menu-item" href="#">Users</a></li>
+                <li><a class="menu-item active" name="dashboard" href="http://127.0.0.1:5000/admin">Dashboard</a></li>
+                <li><a class="menu-item" name="users" href="http://127.0.0.1:5000/users">Users</a></li>
                 <li><a class="menu-item" href="#">Charts</a></li>
             </ul>
             </nav>
@@ -40,6 +40,7 @@
                             <a style="color:white;" class="mr-3"><b>Welcome, {{ session.user_username }}!</b></a>
                         {% else %}
                         {% endif %}
+                        <ion-icon name="settings-sharp" class="mr-3 icon"></ion-icon>
                         <button type="button" class="btn btn-light ms-auto" id="logout-button" onclick="logoutButton()">Logout</button>
                     </div>
                 </div>
@@ -164,7 +165,7 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-        <script src="{{ url_for('serve_static', path='js/login-signup.js') }}"></script>
+        <script src="{{ url_for('serve_static', path='js/app.js') }}"></script>
         <script src="{{ url_for('serve_static', path='js/task-actions.js') }}"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

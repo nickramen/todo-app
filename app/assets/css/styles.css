@@ -82,6 +82,17 @@
     margin-left: 200px;
 }
 
+.icon{
+    color: #fff;
+    margin-right: 15px;
+    font-size: 25px;
+}
+
+.icon:hover{
+    color:gray;
+    cursor: pointer;
+}
+
 /* Menu container */
 .menu-container {
     position: fixed;

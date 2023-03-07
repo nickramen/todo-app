@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import sqlite3
 from src.database import create_connection
 from src.graphs import task_per_day, task_done_undone, admin_task_done_undone, admin_task_per_day, admin_overview_task_total,admin_overview_user_total,admin_overview_category_total, admin_task_per_category, user_satisfaction, admin_overview_user_satisfaction,task_per_category_count,admin_user_active_inactive
+from src.users import users_list
 import json
 
 app = Flask(__name__,template_folder='template')
@@ -73,6 +74,53 @@ def admin():
         
     return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category,admin_user_satisfaction=admin_user_satisfaction,active_inactive_users=active_inactive_users)
 
+# # Load admin template, Render data to template, Load data for the graphs
+# @app.route('/users', methods=['POST'])
+# def users():
+    
+#     # with create_connection() as myConnection:
+            
+#     #         try:
+#     #             cursor = myConnection.cursor()
+                
+#     #             users = cursor.execute("SELECT user_id, user_username, user_email, user_status FROM tbUsers").fetchall()
+                
+#     #             #users = [dict(zip(['user_id', 'user_username', 'user_email', 'user_status'], row)) for row in users]
+                
+#     #             print(users)
+                                
+#     #             return render_template('users.html', users=users)
+#     #         except:
+#     #             return jsonify({'success': False})
+
+#     #return render_template('users.html', users=users)
+    
+#     return render_template('users.html')
+@app.route('/users', methods=['GET'])
+def users():
+    with create_connection() as myConnection:
+        
+        cursor = myConnection.cursor()
+        users = cursor.execute("SELECT user_id, user_username, user_email, user_status FROM tbUsers").fetchall()
+        print(users)
+        
+    return render_template('users.html')
+    
+
+@app.route('/users_list', methods=['GET'])
+def users_list():
+    
+    with create_connection() as myConnection:
+        
+        try:
+            cursor = myConnection.cursor()
+            users = cursor.execute("SELECT user_id, user_username, user_email, user_status FROM tbUsers").fetchall()
+            return users
+        except:
+            return jsonify({'success': False})
+
+
+
 # TASK ACTIONS
 
 # Get the task description and day ID from the form, Get the last task ID from 
@@ -111,7 +159,7 @@ def task_status():
         taskId = request.get_data(as_text=True)
         current_time = datetime.datetime.now()
         
-        taskStatus = cursor.execute('SELECT task_status FROM tbTasks WHERE task_id == ?', (taskId,)).fetchone()[0]
+        taskStatus = cursor.execute('SELECT task_status FROM tbTasks WHERE task_id = ?', (taskId,)).fetchone()[0]
         
         if(taskStatus == 1):
             cursor.execute('UPDATE tbTasks SET task_status = ?, edit_date = ? WHERE task_id = ?', (0, current_time, taskId))
@@ -147,7 +195,7 @@ def delete_task():
         taskId = request.get_data(as_text=True)
         try:
             #cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
-            cursor.execute('UPDATE tbTasks SET is_deleted = 1 WHERE task_id == ?',(taskId,))
+            cursor.execute('UPDATE tbTasks SET is_deleted = 1 WHERE task_id = ?',(taskId,))
             return jsonify({'success': True})
         except:
             return jsonify({'success': False})
@@ -165,7 +213,6 @@ def update_task():
         new_description = data_dict.get('newDescription')
         current_time = datetime.datetime.now()
         
-        print(task_id,new_description)
         try:
             cursor.execute('UPDATE tbTasks SET task_description = ?, edit_date = ? WHERE task_id = ?', (new_description,current_time,task_id))
             myConnection.commit()
@@ -174,7 +221,6 @@ def update_task():
             return jsonify({'success': False})
 
 # LOGIN AND SIGNUP
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
             
@@ -252,5 +298,3 @@ def update_satisfaction_rate():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
-    
-    

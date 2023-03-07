@@ -25,6 +25,7 @@
                         <a style="color:white;" class="mr-3"><b>Welcome, {{ session.user_username }}!</b></a>
                     {% else %}
                     {% endif %}
+                    <ion-icon name="settings-sharp" class="mr-3 icon"></ion-icon>
                     <button type="button" class="btn btn-light ms-auto" id="logout-button" onclick="logoutButton()">Logout</button>
                 </div>
             </div>
@@ -102,7 +103,7 @@
                                         {% if task[2] == 1 %}
                                             <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks" checked >
                                             <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
-                                            <label id="{{ task[0] }}" class="task-item" style="color:rgb(131, 132, 133); padding: 0 2px; display: inline;" >{{ task[1] }}</label><br>
+                                            <label id="{{ task[0] }}" class="task-item checked" style="color:rgb(131, 132, 133); padding: 0 2px; display: inline;" >{{ task[1] }}</label><br>
                                         {% else %}
                                             <input type="checkbox" id="{{ task[0] }}" class="list-of-tasks">
                                             <ion-icon id="{{ task[0] }}" class="icon-delete" style="color: red;" name="trash-sharp" data-toggle="modal" data-target="#exampleModal"></ion-icon>
