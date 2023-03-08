@@ -75,8 +75,6 @@ def admin():
     return render_template('admin.html', admin_per_day_count=admin_per_day_count,admin_task_count=admin_task_count,admin_task_total=admin_task_total,admin_user_total=admin_user_total,admin_category_total=admin_category_total,categories=categories,task_per_category=task_per_category,admin_user_satisfaction=admin_user_satisfaction,active_inactive_users=active_inactive_users)
 
 
-# USER ACTIONS
-
 @app.route('/users', methods=['GET'])
 def users():
         
@@ -94,31 +92,6 @@ def users_list():
             return users
         except:
             return jsonify({'success': False})
-
-@app.route('/add_user', methods=['POST'])
-def add_user():
-    with create_connection() as myConnection:
-        cursor = myConnection.cursor()
-        
-        username = request.form['signup-username']
-        email = request.form['signup-email']
-        password = request.form['signup-password']
-        confirm_password = request.form['signup-confirm-password']
-        
-        last_id = cursor.execute('SELECT MAX(user_id) FROM tbUsers').fetchone()[0]
-        if last_id is None:
-            last_id = 0
-        
-        if password != confirm_password:
-            return jsonify({'success': False})
-        else:
-            try:
-                # insert new user into tbUsers with default status(1=active) and rol_id (2=user)
-                cursor.execute("INSERT INTO tbUsers (user_id, user_username, user_email, user_password, user_status, rol_id, user_satisfaction) VALUES (?, ?, ?, ?, ?, ?, ?)", (last_id + 1, username, email, password, 1, 2, 0))
-                myConnection.commit()
-                return jsonify({'success': True})
-            except:
-                return jsonify({'success': False})
 
 
 

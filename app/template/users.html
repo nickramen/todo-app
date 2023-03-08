@@ -62,7 +62,8 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-9"><h3>Users list</h3></div>
-                            <div class="col-md-3"><a class="btn btn-dark float-right" style="color: white; cursor: pointer;">  New User</a></div>
+                            
+                            <div class="col-md-3"><button type="button" class="btn btn-dark float-right ml-auto" data-toggle="modal" data-target="#addUserModal" id="add-button">Add user</button></div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -91,6 +92,66 @@
         </div>
         
 
+        <!--Add task Modal-->
+        <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="login-signup-form">
+                        <div class="mb-3">
+                            <label for="signup-username" class="form-label">Username<span style="color: red; font-size: 20px;"> *</span></label>
+                            <input type="text" class="form-control" id="signup-username" name="signup-username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-email" class="form-label">Email<span style="color: red; font-size: 20px;"> *</span></label>
+                            <input type="email" class="form-control" id="signup-email" name="signup-email" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="signup-password" class="form-label">Password<span style="color: red; font-size: 20px;"> *</span></label>
+                                <input type="password" class="form-control" id="signup-password" name="signup-password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="signup-confirm-password" class="form-label">Confirm Password<span style="color: red; font-size: 20px;"> *</span></label>
+                                <input type="password" class="form-control" id="signup-confirm-password" name="signup-confirm-password" required>
+                            </div>
+                        </div>       
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="addUser()" class="btn btn-primary">Add new user</button>
+                </div>
+                </div>
+            </div>
+            </div>
+    
+        <!-- Delete task Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to permanently delete this task?</p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="task-delete-button" task-id="" onclick="taskDelete()">Delete task</button>
+                </div>
+            </div>
+            </div>
+        </div>
         
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -100,8 +161,6 @@
 
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        
-        <script src="{{ url_for('serve_static', path='js/task-actions.js') }}"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -117,7 +176,7 @@
         <script src="{{ url_for('serve_static', path='plugins/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
         <script src="{{ url_for('serve_static', path='plugins/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
 
-        <script src="{{ url_for('serve_static', path='js/list-users.js') }}"></script>
+        <script src="{{ url_for('serve_static', path='js/users-actions.js') }}"></script>
 
     </body>
 </html>
