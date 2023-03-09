@@ -46,7 +46,7 @@ Now that you have launched the app it will load in your localhost. Visit: http:/
 - password: nickramen
 
 - username: nicole
-- username nicole
+- password: nicole
 
 Use the two users above since they have data assigned to them in the initial data.
 

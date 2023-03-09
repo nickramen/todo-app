@@ -87,13 +87,13 @@ def users():
 def users_list():
     
     with create_connection() as myConnection:
-        
         try:
             cursor = myConnection.cursor()
-            users = cursor.execute("SELECT user_id, user_username, user_email, user_status FROM tbUsers").fetchall()
+            users = cursor.execute("SELECT user_id, user_username, user_email, user_status FROM tbUsers WHERE is_deleted = 0").fetchall()
             return users
         except:
             return jsonify({'success': False})
+
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
@@ -120,10 +120,23 @@ def add_user():
             except:
                 return jsonify({'success': False})
 
-
-
+# Get the id from the request body and Delete task status using the id
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    
+    with create_connection() as myConnection:
+        cursor = myConnection.cursor()
+        
+        user_Id = request.get_data(as_text=True)
+        try:
+            #cursor.execute('DELETE FROM tbTasks WHERE task_id == ?', (taskId,))
+            cursor.execute('UPDATE tbUsers SET is_deleted = 1 WHERE user_id = ?',(user_Id,))
+            return jsonify({'success': True})
+        except:
+            return jsonify({'success': False})
+        
+        
 # TASK ACTIONS
-
 # Get the task description and day ID from the form, Get the last task ID from 
 # the database for the new id, Insert the new task into the db with status set as undone (0)
 @app.route('/add_task', methods=['POST'])
